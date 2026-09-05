@@ -48,3 +48,5 @@ h3 { font: 2rem/1.15 Georgia, serif; margin: 2rem 0 1rem; }
 .site-footer > span { margin-left: auto; font-size: .75rem; color: var(--muted); }
 @media (max-width: 760px) { .site-header { min-height: 80px; justify-content: space-between; } .edition { display: none; } .hero { grid-template-columns: 1fr; padding-block: 3rem; gap: 2rem; } .editorial-panel { min-height: 340px; padding: 1.5rem; } .story-grid { grid-template-columns: 1fr; } .story-card h3 br { display: none; } .story-card h3 { margin-top: 1rem; } .section-label { display: none; } .site-footer { align-items: start; flex-direction: column; gap: .3rem; padding-block: 2rem; } .site-footer p { margin-block: .5rem; } .site-footer > span { margin-left: 0; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.source-link { text-decoration: underline; text-underline-offset: 3px; }

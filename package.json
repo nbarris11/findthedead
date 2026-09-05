@@ -10,8 +10,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test tests/*.test.ts"
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "seed:build": "node --experimental-strip-types scripts/build-seed.ts",
+    "seed:check": "node --experimental-strip-types scripts/build-seed.ts --check",
+    "test:db": "node --experimental-strip-types --test tests/database.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.115.0",
@@ -22,6 +25,8 @@
     "zod": "4.5.4"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@electric-sql/pglite-postgis": "0.2.8",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "26.4.1",
     "@types/react": "19.2.18",

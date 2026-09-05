@@ -1,0 +1,584 @@
+{
+  "label": "Sourced development preview — not yet approved for publication",
+  "retrieved_at": "2026-09-05T16:00:00Z",
+  "status": "draft",
+  "is_fixture": true,
+  "categories": [
+    {
+      "id": "f88e051e-14d1-5656-b77d-af2fdb03defe",
+      "slug": "music",
+      "name": "Music",
+      "sort_order": 0
+    },
+    {
+      "id": "97a8fe86-6b1b-53c0-afcd-6282d609f9bc",
+      "slug": "sports",
+      "name": "Sports",
+      "sort_order": 1
+    },
+    {
+      "id": "a33f9d9f-adf2-5ee0-b045-fd8abdf6b55b",
+      "slug": "politics",
+      "name": "Politics",
+      "sort_order": 2
+    },
+    {
+      "id": "91770580-4a03-5d33-9ba6-cd48cc6b72f0",
+      "slug": "business",
+      "name": "Business",
+      "sort_order": 3
+    },
+    {
+      "id": "2dd18dc5-9e3b-564b-a5e8-0ddeb1c0a185",
+      "slug": "inventors",
+      "name": "Inventors",
+      "sort_order": 4
+    },
+    {
+      "id": "37c35b3d-0d37-5e80-85d3-bd47e782097f",
+      "slug": "military",
+      "name": "Military",
+      "sort_order": 5
+    },
+    {
+      "id": "5051e3f7-bdbf-56d7-8a2b-e89840d98b99",
+      "slug": "crime",
+      "name": "Crime",
+      "sort_order": 6
+    },
+    {
+      "id": "42243d1a-f123-5534-841c-e117ac741ff8",
+      "slug": "entertainment",
+      "name": "Entertainment",
+      "sort_order": 7
+    },
+    {
+      "id": "79feaec3-bc75-5b6c-9546-bc503597f72e",
+      "slug": "history",
+      "name": "History",
+      "sort_order": 8
+    },
+    {
+      "id": "d45f9d1b-ce89-5e55-a058-1081589c93ce",
+      "slug": "local-legends",
+      "name": "Local Legends",
+      "sort_order": 9
+    }
+  ],
+  "cemeteries": [
+    {
+      "id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "slug": "woodlawn-detroit",
+      "name": "Woodlawn Cemetery",
+      "city": "Detroit",
+      "state": "Michigan",
+      "country": "US",
+      "latitude": 42.4419,
+      "longitude": -83.1261,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171"
+    },
+    {
+      "id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "slug": "elmwood-detroit",
+      "name": "Elmwood Cemetery",
+      "city": "Detroit",
+      "state": "Michigan",
+      "country": "US",
+      "latitude": 42.34722,
+      "longitude": -83.01861,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484"
+    }
+  ],
+  "people": [
+    {
+      "id": "670a7986-20c6-5828-ae71-5845c13c4a02",
+      "slug": "aretha-franklin",
+      "name": "Aretha Franklin",
+      "birth_year": 1942,
+      "death_year": 2018,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Soul vocalist.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 98,
+      "categories": [
+        "music"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "3e901415-0e61-580c-af05-7d3af3d3fc27",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": true
+    },
+    {
+      "id": "468fbec4-9b0e-5f01-9787-50f41f422286",
+      "slug": "rosa-parks",
+      "name": "Rosa Parks",
+      "birth_year": 1913,
+      "death_year": 2005,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Civil rights advocate.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 99,
+      "categories": [
+        "history"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "aee58f4a-fec5-55f7-8a0f-df17368ff7bf",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": true
+    },
+    {
+      "id": "832c7114-a4ba-5038-a420-5afac54cca76",
+      "slug": "edsel-ford",
+      "name": "Edsel Ford",
+      "birth_year": 1893,
+      "death_year": 1943,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Led Ford Motor Company.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 88,
+      "categories": [
+        "business"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "0ad284f5-104f-59fd-a449-b8b663155f68",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": true
+    },
+    {
+      "id": "e0bec093-e813-5985-bd05-8cd60a8413a7",
+      "slug": "john-dodge",
+      "name": "John Dodge",
+      "birth_year": 1864,
+      "death_year": 1920,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Helped establish Dodge.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 85,
+      "categories": [
+        "business"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "030c6dd9-a849-5a27-b4e7-11c25d92034a",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "da14eb73-4a84-5361-82ca-8d7facd2b585",
+      "slug": "horace-dodge",
+      "name": "Horace Dodge",
+      "birth_year": 1868,
+      "death_year": 1920,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Helped establish Dodge.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 85,
+      "categories": [
+        "business"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "c72f857a-daac-5188-8c30-ebe7c373d82b",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "94ba1a2f-cb0c-53cf-a955-5d8058d40b45",
+      "slug": "james-jamerson",
+      "name": "James Jamerson",
+      "birth_year": 1938,
+      "death_year": 1983,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Played bass for Motown.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 92,
+      "categories": [
+        "music"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "032270a5-2247-54e3-ac0a-f7677f17034c",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "8b1fdb9f-76fe-58be-92ed-1f5a792cd5ed",
+      "slug": "david-ruffin",
+      "name": "David Ruffin",
+      "birth_year": 1941,
+      "death_year": 1991,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Sang with the Temptations.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 89,
+      "categories": [
+        "music"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "54b63472-fd20-51d3-80dd-634754de101b",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "2d951d78-04cb-536d-8f9f-ce193f21a5eb",
+      "slug": "levi-stubbs",
+      "name": "Levi Stubbs",
+      "birth_year": 1936,
+      "death_year": 2008,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Sang with the Four Tops.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 89,
+      "categories": [
+        "music"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "82d7fd10-58dc-54ec-a566-ccea2935dc23",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "7877fd69-c3db-5471-bbf8-1aec34a0a96d",
+      "slug": "ed-killian",
+      "name": "Ed Killian",
+      "birth_year": 1876,
+      "death_year": 1928,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Pitched in major-league baseball.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 65,
+      "categories": [
+        "sports"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "c5b47b88-8e8c-5c12-83e1-20b01acf1db7",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "9df5ce48-8ae3-5d08-9294-65a19c3f3218",
+      "slug": "roy-chapin",
+      "name": "Roy D. Chapin",
+      "birth_year": 1880,
+      "death_year": 1936,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Automotive leader and commerce secretary.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 76,
+      "categories": [
+        "business",
+        "politics"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "1dbb237a-4a0f-532d-a882-8ffca26f8e91",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "7bf0d432-70b0-5b5d-8796-ff38dda5d0c4",
+      "slug": "george-holley",
+      "name": "George M. Holley Sr.",
+      "birth_year": 1878,
+      "death_year": 1963,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Designed automotive technology.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 72,
+      "categories": [
+        "inventors",
+        "business"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "4e2d1605-74f8-556d-85af-39a2e9d825a8",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "27713897-8883-537c-be67-63c3703ee029",
+      "slug": "clara-arthur",
+      "name": "Clara Arthur",
+      "birth_year": 1858,
+      "death_year": 1929,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Advocated for women’s voting rights.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 72,
+      "categories": [
+        "history"
+      ],
+      "cemetery_id": "31dd8c79-a0d5-5428-bbaf-14f4963f4625",
+      "burial_id": "e18990ce-1369-5a6f-90ba-38cfca10debf",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
+      "is_featured": false
+    },
+    {
+      "id": "02e37930-2dcb-5628-a702-7c717071e7e5",
+      "slug": "coleman-young",
+      "name": "Coleman Young",
+      "birth_year": 1918,
+      "death_year": 1997,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Led Detroit as mayor.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 90,
+      "categories": [
+        "politics"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "77d6fc24-9854-5f9f-be99-1f90d16947d7",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "7e5ddc37-8cd8-51b8-827e-4d46e4928111",
+      "slug": "russell-alger",
+      "name": "Russell A. Alger",
+      "birth_year": 1836,
+      "death_year": 1907,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Served as Michigan governor.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 78,
+      "categories": [
+        "politics"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "509852fc-5275-5dc7-b04a-5a4f55b7864e",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "9dbb7377-b309-5293-b64d-94fdf1120b37",
+      "slug": "lewis-cass",
+      "name": "Lewis Cass",
+      "birth_year": 1782,
+      "death_year": 1866,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Governed Michigan Territory.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 78,
+      "categories": [
+        "politics",
+        "history"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "c9fd7634-4e3e-549d-9257-c683ee47c25e",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "ca959d4e-a59a-5f01-9f9a-b8e7a13e4fab",
+      "slug": "zachariah-chandler",
+      "name": "Zachariah Chandler",
+      "birth_year": 1813,
+      "death_year": 1879,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Represented Michigan in the Senate.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 76,
+      "categories": [
+        "politics"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "7815f9ef-ee87-544e-b170-9ffd3b472f3a",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "f31d3b3c-33c0-5cd8-9997-5ebec413eceb",
+      "slug": "philip-cooke",
+      "name": "Philip St. George Cooke",
+      "birth_year": 1809,
+      "death_year": 1895,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Served as a Civil War general.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 68,
+      "categories": [
+        "military"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "b2329fc2-90aa-543c-9f71-39bf01d811fb",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "d7c76126-175f-57ae-b496-99c1a87203ea",
+      "slug": "william-ferguson",
+      "name": "William Webb Ferguson",
+      "birth_year": 1857,
+      "death_year": 1910,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Broke a racial barrier in Michigan’s legislature.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 80,
+      "categories": [
+        "politics",
+        "history"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "5891f298-79c3-52d1-8c27-f7ed14cff66b",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "4eba5497-b74f-562a-95ab-f6b23c02c451",
+      "slug": "harry-guy",
+      "name": "Harry P. Guy",
+      "birth_year": 1870,
+      "death_year": 1950,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Composed ragtime music.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 70,
+      "categories": [
+        "music"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "e0611ef4-4b07-5536-b15e-85977238c56b",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "e4a3cdf8-b674-5990-8f15-bc94c28a2502",
+      "slug": "douglass-houghton",
+      "name": "Douglass Houghton",
+      "birth_year": 1809,
+      "death_year": 1845,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Geologist and Detroit mayor.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 75,
+      "categories": [
+        "history",
+        "local-legends"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "fdf2e500-0d30-5c80-911e-e7454a4e9cfd",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "8f843cd2-a0db-5874-b795-6ac47559f0a4",
+      "slug": "sam-thompson",
+      "name": "Sam Thompson",
+      "birth_year": 1860,
+      "death_year": 1922,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Baseball Hall of Fame outfielder.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 85,
+      "categories": [
+        "sports"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "78c55f84-e8fc-54fd-8195-c9c919028843",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    },
+    {
+      "id": "ec9e5e65-0032-5470-aafa-a6f2e5d5296d",
+      "slug": "martha-jean-steinberg",
+      "name": "Martha Jean Steinberg",
+      "birth_year": 1930,
+      "death_year": 2000,
+      "birth_date": null,
+      "death_date": null,
+      "short_description": "Worked in radio.",
+      "biography": null,
+      "why_interesting": null,
+      "dead_score": 75,
+      "categories": [
+        "entertainment",
+        "local-legends"
+      ],
+      "cemetery_id": "cf5fd564-849e-5995-b19c-837f4900cb45",
+      "burial_id": "ab181135-aa84-56d0-862a-329852ddda0e",
+      "location_precision": "cemetery",
+      "location_confidence": 0.75,
+      "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
+      "is_featured": false
+    }
+  ]
+}

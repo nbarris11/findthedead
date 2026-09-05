@@ -27,3 +27,9 @@ Import the repository into Vercel after local verification; configure public ori
 ## Toolchain compatibility decision
 
 On 2026-09-05 npm reports Next.js 16.3.4 and React 19.2.8 as stable. TypeScript 7.0.2 was tested, but Next's typescript-eslint dependency rejects its API. Pin TypeScript 6.0.3 until that support lands; do not suppress lint or add a parallel compiler solely to claim the newest version. npm resolves ESLint 9.39.5 for the compatible lint dependency graph. Revisit both together. Supabase's July 2026 extension change deprecates explicit extension versions, so migrations use the platform's default PostGIS version.
+
+## Executable database checks
+
+Docker is not installed in the initial workspace. Two test-only packages, PGlite and its PostGIS extension, make real SQL and spatial checks repeatable without external infrastructure. The deployment still uses Supabase; there is no embedded production database. Role bootstrap in the harness approximates Supabase's anonymous/authenticated/service roles. Run the standalone SQL smoke file on local Supabase before deployment to cover platform differences.
+
+The homepage is a Server Component that reads featured records through the server-only repository. It is dynamically rendered so missing deployment credentials do not break the build and configuration/data changes do not require rebuilding. Errors reach a user-friendly retry boundary; empty published datasets show an honest empty state. Only explicit demo mode returns source-backed development fixtures, with a visible label. Demo mode is rejected on Vercel production.

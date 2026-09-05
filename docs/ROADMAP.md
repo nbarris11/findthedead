@@ -11,3 +11,9 @@
 Milestones 1–2 are this session's scope. Never combine unrelated work into one commit. Preserve the next milestones until the schema and development flow are stable.
 
 Before public launch: complete real-database tests, review all seed evidence and locations, license images, add observability without location leakage, validate the actual map/location flow on mobile and keyboard, and enable SEO only for reviewed pages. Authentication/admin/tours are separate later decisions.
+
+## Foundation delivery status
+
+Milestones 1 and 2 are implemented. Milestone 1 was committed as `18456fb`. Milestone 2 adds 22 sourced development people, two cemeteries, 10 categories, 46 provenance records, protected geographic RPCs, an explicit offline repository, and database-backed featured reads. No later milestone has started.
+
+Validation: lint, strict TypeScript, seed reproducibility, 16 tests (including executable PostgreSQL/PostGIS checks), production build, and local HTTP response. Docker/Supabase/PostgREST integration and the Supabase security advisor require a running local Supabase instance and remain pre-deployment checks. Browser interaction testing is deferred with the map milestone.
