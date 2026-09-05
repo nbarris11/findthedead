@@ -24,6 +24,9 @@ export function demoPeople(input: Seed): DiscoveryPerson[] {
       latitude: c.latitude,
       longitude: c.longitude,
       categories: p.categories,
+      // The whole fixture batch was added in one import; retrieved_at is the
+      // real timestamp of that, not a per-person value invented for sorting.
+      created_at: seed.retrieved_at,
     };
   });
 }

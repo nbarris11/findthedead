@@ -18,6 +18,12 @@ Store WGS84 geography points and GiST indexes. A burial has an optional location
 
 If `NEXT_PUBLIC_MAPBOX_TOKEN` is unset, `/explore` renders `MapFallback`, an accessible list of the same bounds query result, rather than a broken map.
 
+## Nearby
+
+`/nearby` is a static page (no server data fetch — it has no meaningful content without the visitor's location) that renders `NearbyClient`. Its permission gate is explicit (a "Share my location" button) rather than prompting on load, matching `/explore`; a "Browse Detroit instead" button and automatic fallback on denial/unavailability both use the same default-region origin as Explore, always labeled as not the visitor's real location. `GET /api/people/nearby` wraps the existing `nearbyPeople` repository function the same way the bounds route wraps `peopleInBounds`. The three sort options (nearest, most notable, recently added) are a client-side re-sort of one fetched batch — no refetch or extra query parameter — because the API already returns `distance_meters` and `dead_score`, and `created_at` was added to the discovery pipeline for exactly this (see docs/DATABASE.md).
+
+Data fetching lives in `useNearbyResults`, a dedicated hook, not inline in `NearbyClient` — and deliberately does not set a `loading` flag synchronously at the top of its effect. `eslint-plugin-react-hooks`'s `set-state-in-effect` rule flags that pattern even from a helper function called by the effect; the intended fix is to derive loading state instead of imperatively setting it. The hook keeps only the last *settled* (or errored) request, keyed by `{latitude, longitude, radius}`, and compares that key against the current render's inputs: mismatched means still loading, and a stale response arriving after a newer request started can never overwrite it. This has a real UX benefit beyond satisfying the linter — the previous result list stays on screen while a new radius or location loads, instead of flashing empty.
+
 ## Future identity and admin
 
 Core reads are public. Saved/visited/collections later use Supabase Auth and owner-scoped RLS. A private admin needs explicit server-side role checks, audit history, draft/publish review, coordinate correction, source management, score adjustment, featured records, and correction triage. Never authorize with editable user metadata. No admin browser may receive a service-role key.

@@ -109,6 +109,7 @@ export type DiscoveryPerson = {
   latitude: number;
   longitude: number;
   categories: string[];
+  created_at: string;
 };
 export type NearbyPerson = DiscoveryPerson & { distance_meters: number };
 export type CategoryOption = Pick<CategoryRow, "slug" | "name">;

@@ -29,6 +29,7 @@ function person(overrides: Partial<DiscoveryPerson> = {}): DiscoveryPerson {
     latitude: 42.4419,
     longitude: -83.1261,
     categories: ["history"],
+    created_at: "2026-01-01T00:00:00.000Z",
     ...overrides,
   };
 }
