@@ -6,7 +6,7 @@ Next.js App Router, strict TypeScript, React, Tailwind, Zod, Supabase PostgreSQL
 
 Server Components own page rendering and metadata. `/explore` is a Server Component that fetches the first paint of visible people and categories, then hands off to `ExploreClient`, the one meaningful client boundary: it owns map state, filters, geolocation, and the bottom sheet. `src/lib/data` is the server-only repository boundary; ordinary requests use Supabase, never Wikidata. A separate, explicit development mode reads committed seed fixtures with no credentials. Supabase failures must not silently fall back to demo content. Never use service-role keys for public reads.
 
-`supabase/migrations` defines schema and SQL query functions. `data` holds reviewed development seed inputs. `scripts` contains deterministic local seed tooling; network ingestion comes in milestone 7. `tests` covers validation and geographic edge cases. `supabase/tests` exercises schema and access rules on a real PostGIS database.
+`supabase/migrations` defines schema and SQL query functions. `data` holds reviewed development seed inputs (`data/ingestion-runs/`, gitignored, holds raw unreviewed fetch output — see Ingestion, below). `scripts` contains deterministic local seed tooling and the two ingestion CLIs. `tests` covers validation, geographic edge cases, and the ingestion pipeline's pure logic. `supabase/tests` exercises schema and access rules on a real PostGIS database.
 
 ## Geographic design
 
@@ -39,6 +39,14 @@ Both repository functions return `null` for a slug that doesn't exist *or* isn't
 `SearchClient` debounces the raw input (300ms, `useDebouncedValue`) before handing it to `useSearchResults`, which uses the identical settled-key loading derivation as `useNearbyResults` (see Nearby, above) for the same reason: `eslint-plugin-react-hooks`'s `set-state-in-effect` rule flags an imperative loading flag set synchronously in the effect body. This is the second feature to need that pattern, which is the point at which it stopped being a one-off workaround and started being how this codebase does effect-driven data fetching.
 
 Only person search is implemented, matching the spec's own explicit initial scope ("For the initial version, implement performant person search"). The response shape is already a `SearchResult = {type:"person"; person} | {type:"cemetery"; cemetery}` discriminated union (`src/lib/search/types.ts`) and `SearchResultCard` already switches on it, so cemetery search can be added later by populating the other branch of that union rather than reworking how results render.
+
+## Ingestion
+
+`src/lib/ingestion` is a self-contained pipeline, deliberately outside `src/lib/data`: `wikidata.ts` (the SPARQL query builder and a fetch client with retry/backoff, its `fetchImpl` parameter injectable so the client is unit-testable without a real network call), `normalize.ts` and `dedupe.ts` (pure functions — the actual test surface, since the network call itself can't be a repeatable unit test), `types.ts` (`IngestionCandidate`/`DedupedCandidate`, carrying no editorial fields — see docs/DATA-SOURCES.md on why), `reviewed.ts` (the Zod contract a candidate must satisfy after human review, gated on a literal `confirmed: true`), and `publish.ts` (the actual Supabase writer, used only by the human-invoked `scripts/publish-reviewed-candidates.ts`, never by `scripts/ingest-wikidata.ts`).
+
+`publish.ts` needed one small addition to the schema, `set_cemetery_location` (migration `20260905220000_set_cemetery_location.sql`): the Supabase JS client goes through PostgREST, which can't express `ST_SetSRID(ST_MakePoint(...))` in a plain insert/update payload the way `build-seed.ts`'s raw SQL can. It's a thin RPC wrapper around exactly that expression, granted to `service_role` only — the same role every other write path in this schema is restricted to, never a capability unique to ingestion.
+
+A real, live-verified bug worth recording: Wikidata Query Service's `wikibase:around` geospatial service only binds its variable correctly when it appears *before* the triples that consume it in the query body — placing it after silently returns zero rows instead of erroring. This was found by actually running the query against the live endpoint, not by reading documentation; `buildBurialRadiusQuery`'s clause order is deliberate and commented for exactly this reason.
 
 ## Future identity and admin
 

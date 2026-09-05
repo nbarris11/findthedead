@@ -9,3 +9,6 @@ coverage/
 .vercel/
 supabase/.temp/
 supabase/.branches/
+# Raw, unreviewed ingestion output — never committed until an editor has
+# turned a run into reviewed seed-like input. See docs/DATA-SOURCES.md.
+data/ingestion-runs/

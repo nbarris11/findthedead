@@ -223,6 +223,10 @@ export type Database = {
         Args: { q: string; result_limit?: number };
         Returns: DiscoveryPerson[];
       };
+      set_cemetery_location: {
+        Args: { p_cemetery_id: string; p_longitude: number; p_latitude: number };
+        Returns: undefined;
+      };
       query_envelopes: { Args: BoundsArgs; Returns: string[] };
     };
     Enums: {

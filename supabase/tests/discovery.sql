@@ -22,6 +22,40 @@ begin
 end;
 $$;
 reset role;
+-- set_cemetery_location is the ingestion publish path's only way to write
+-- PostGIS geography through PostgREST; it must be service_role-only and
+-- must actually move the point when called correctly.
+insert into public.cemeteries (id, slug, name, country, status, is_fixture)
+values ('00000000-0000-0000-0000-00000000cafe', 'test-only-cemetery', 'Test Only Cemetery', 'US', 'draft', true);
+set local role anon;
+do $$
+begin
+  begin
+    perform public.set_cemetery_location('00000000-0000-0000-0000-00000000cafe', -83.0, 42.0);
+    raise exception 'anon should not be able to set cemetery location';
+  exception when insufficient_privilege then null;
+  end;
+end;
+$$;
+reset role;
+set local role service_role;
+do $$
+begin
+  perform public.set_cemetery_location('00000000-0000-0000-0000-00000000cafe', -83.5, 42.5);
+  if (select round(extensions.st_x(location::extensions.geometry)::numeric,1) from public.cemeteries where slug='test-only-cemetery') <> -83.5
+    then raise exception 'set_cemetery_location did not set longitude';
+  end if;
+  if (select round(extensions.st_y(location::extensions.geometry)::numeric,1) from public.cemeteries where slug='test-only-cemetery') <> 42.5
+    then raise exception 'set_cemetery_location did not set latitude';
+  end if;
+  begin
+    perform public.set_cemetery_location('00000000-0000-0000-0000-00000000cafe', 200, 42.5);
+    raise exception 'set_cemetery_location should reject an out-of-range longitude';
+  exception when sqlstate '22023' then null;
+  end;
+end;
+$$;
+reset role;
 -- Test-only exact grave overrides a cemetery, and another point crosses the date line.
 update public.burials set location=extensions.st_setsrid(extensions.st_makepoint(179.5,0),4326)::extensions.geography, location_precision='exact_grave'
 where person_id=(select id from public.people where slug='aretha-franklin');

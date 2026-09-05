@@ -24,7 +24,7 @@ Profile reads (`personProfile`, `cemeteryProfile`) are the one place the app que
 
 ## Implemented contracts
 
-Migrations: `supabase/migrations/20260905162642_discovery_foundation.sql` (created through the Supabase CLI), `20260905190000_expose_created_at.sql`, which appends `people.created_at` to `discovery_people` (a compatible `CREATE OR REPLACE VIEW`, since Postgres allows adding columns to the end of a view's output) and to `nearby_people`'s explicit `RETURNS TABLE` list (which required a drop and recreate, since a function's declared return columns cannot be changed in place), `20260905200000_cemetery_by_slug.sql`, and `20260905210000_search_people.sql`.
+Migrations: `supabase/migrations/20260905162642_discovery_foundation.sql` (created through the Supabase CLI), `20260905190000_expose_created_at.sql`, which appends `people.created_at` to `discovery_people` (a compatible `CREATE OR REPLACE VIEW`, since Postgres allows adding columns to the end of a view's output) and to `nearby_people`'s explicit `RETURNS TABLE` list (which required a drop and recreate, since a function's declared return columns cannot be changed in place), `20260905200000_cemetery_by_slug.sql`, `20260905210000_search_people.sql`, and `20260905220000_set_cemetery_location.sql`.
 
 | Function | Inputs | Output |
 | --- | --- | --- |
@@ -33,6 +33,7 @@ Migrations: `supabase/migrations/20260905162642_discovery_foundation.sql` (creat
 | `cemeteries_in_bounds` | west/south/east/north, result_limit | Cemetery DTOs alphabetically |
 | `cemetery_by_slug` | slug | One cemetery's full detail plus its own lat/lng (not a person's effective discovery point); empty if unknown, draft, or a fixture |
 | `search_people` | q (free text), result_limit (1–50) | Person DTOs matching every word in `q` as a prefix, ranked by `ts_rank` then editorial score |
+| `set_cemetery_location` | cemetery id, longitude, latitude | Sets a cemetery's PostGIS point; `service_role` only — the ingestion publish path's only way to write geography through PostgREST, which can't express `ST_MakePoint` in a plain payload |
 | `query_envelopes` | west/south/east/north | Validated one or two WGS84 envelopes; internal shared helper |
 
 `search_people` is the first consumer of the `people_name_search` GIN index (`gin(to_tsvector('simple', name))`) created back in the foundation migration — it existed two milestones before anything queried it. Query words are lowercased and stripped of tsquery-special characters before being joined as `word:*` terms with `&`, so a malformed or punctuation-heavy search box input can never surface a raw tsquery syntax error to a visitor; an all-punctuation query (nothing left after stripping) is rejected the same way an empty query is.
