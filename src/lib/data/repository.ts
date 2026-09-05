@@ -5,12 +5,14 @@ import seedInput from "../../../data/detroit.seed.json";
 import { seedSchema } from "../validation/seed";
 import { boundsQuerySchema, nearbyQuerySchema } from "../validation/geo";
 import { slugSchema } from "../validation/slug";
+import { searchQuerySchema } from "../validation/search";
 import { dataConfig } from "./config";
 import {
   demoNearby,
   demoInBounds,
   demoPersonProfile,
   demoCemeteryProfile,
+  demoSearchPeople,
 } from "./demo";
 import type {
   Database,
@@ -224,4 +226,17 @@ export async function cemeteryProfile(
     categories: categories.filter((c) => categorySlugs.has(c.slug)),
     sources: sourcesResult.data ?? [],
   };
+}
+
+/** Only person search is implemented — see docs/PRODUCT.md for why cemetery
+ *  search is deliberately not built yet even though the result type already
+ *  carries a person/cemetery discriminant. */
+export async function searchPeople(query: unknown): Promise<DiscoveryPerson[]> {
+  const args = searchQuerySchema.parse(query);
+  if (dataConfig(process.env).mode === "demo")
+    return demoSearchPeople(seed, args);
+  const { data, error } = await client().rpc("search_people", args);
+  if (error)
+    throw new Error("Search results could not be loaded", { cause: error });
+  return data ?? [];
 }

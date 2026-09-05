@@ -19,6 +19,9 @@ export function SiteHeader() {
         <Link className="header-link" href="/nearby">
           Nearby
         </Link>
+        <Link className="header-link" href="/search">
+          Search
+        </Link>
         <Link className="header-link" href="/#about">
           The idea <span aria-hidden="true">↗</span>
         </Link>

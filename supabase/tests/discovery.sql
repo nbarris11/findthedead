@@ -14,6 +14,11 @@ begin
   if (select count(*) from public.cemetery_by_slug('woodlawn-detroit')) <> 1 then raise exception 'Cemetery by slug failed'; end if;
   if (select round(latitude::numeric,4) from public.cemetery_by_slug('woodlawn-detroit')) <> 42.4419 then raise exception 'Cemetery by slug coordinates wrong'; end if;
   if (select count(*) from public.cemetery_by_slug('no-such-cemetery')) <> 0 then raise exception 'Cemetery by slug should be empty for unknown slug'; end if;
+  if (select slug from public.search_people('aret')) <> 'aretha-franklin' then raise exception 'Search prefix match failed'; end if;
+  if (select slug from public.search_people('aret fran')) <> 'aretha-franklin' then raise exception 'Search multi-word AND match failed'; end if;
+  if (select count(*) from public.search_people('rosa!!')) <> 1 then raise exception 'Search should tolerate punctuation'; end if;
+  if (select count(*) from public.search_people('zzzznomatch')) <> 0 then raise exception 'Search should return nothing for no match'; end if;
+  if (select count(*) from public.search_people('a', 3)) <> 3 then raise exception 'Search result_limit not respected'; end if;
 end;
 $$;
 reset role;
@@ -40,6 +45,7 @@ begin
   if (select count(*) from public.burials) <> 10 then raise exception 'Burials expose hidden cemetery'; end if;
   if (select count(*) from public.people_in_bounds(-180,-90,180,90)) <> 10 then raise exception 'Discovery exposes hidden cemetery'; end if;
   if (select count(*) from public.cemetery_by_slug('woodlawn-detroit')) <> 0 then raise exception 'Cemetery by slug exposes hidden cemetery'; end if;
+  if (select count(*) from public.search_people('aretha')) <> 0 then raise exception 'Search exposes person at hidden cemetery'; end if;
 end;
 $$;
 reset role;

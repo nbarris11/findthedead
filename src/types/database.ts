@@ -219,6 +219,10 @@ export type Database = {
         Args: { p_slug: string };
         Returns: (CemeteryProfileRow & { latitude: number; longitude: number })[];
       };
+      search_people: {
+        Args: { q: string; result_limit?: number };
+        Returns: DiscoveryPerson[];
+      };
       query_envelopes: { Args: BoundsArgs; Returns: string[] };
     };
     Enums: {

@@ -32,6 +32,14 @@ Both repository functions return `null` for a slug that doesn't exist *or* isn't
 
 `ProfileMap` (a single fixed marker, no clustering or click handling) hit the exact same Mapbox container-sizing bug `MapCanvas` did on `/explore` — mapbox-gl's own `mapboxgl-map` class fighting a same-specificity `position: relative` — and needed the identical fix: a nested mount div plus a `ResizeObserver`. Verified in-browser rather than assumed, since it's the same underlying library issue in a new place, not a one-off.
 
+## Search
+
+`GET /api/people/search` wraps a new `search_people(q, result_limit)` RPC (migration `20260905210000_search_people.sql`) built on the `people_name_search` GIN index from the foundation migration — a `gin(to_tsvector('simple', name))` index that existed since Milestone 2 with no consumer until now. Each whitespace-separated word in the query becomes a `word:*` prefix term ANDed with the rest, so "aret fran" matches "Aretha Franklin" while the visitor is still typing either word; tsquery-special characters are stripped from each word first so arbitrary punctuation in a search box can never surface a tsquery syntax error to the visitor. `search_people` returns `setof discovery_people`, the same type every other discovery read already returns, rather than a bespoke search DTO.
+
+`SearchClient` debounces the raw input (300ms, `useDebouncedValue`) before handing it to `useSearchResults`, which uses the identical settled-key loading derivation as `useNearbyResults` (see Nearby, above) for the same reason: `eslint-plugin-react-hooks`'s `set-state-in-effect` rule flags an imperative loading flag set synchronously in the effect body. This is the second feature to need that pattern, which is the point at which it stopped being a one-off workaround and started being how this codebase does effect-driven data fetching.
+
+Only person search is implemented, matching the spec's own explicit initial scope ("For the initial version, implement performant person search"). The response shape is already a `SearchResult = {type:"person"; person} | {type:"cemetery"; cemetery}` discriminated union (`src/lib/search/types.ts`) and `SearchResultCard` already switches on it, so cemetery search can be added later by populating the other branch of that union rather than reworking how results render.
+
 ## Future identity and admin
 
 Core reads are public. Saved/visited/collections later use Supabase Auth and owner-scoped RLS. A private admin needs explicit server-side role checks, audit history, draft/publish review, coordinate correction, source management, score adjustment, featured records, and correction triage. Never authorize with editable user metadata. No admin browser may receive a service-role key.

@@ -1,5 +1,6 @@
 import { seedSchema } from "../validation/seed.ts";
 import { nearbyQuerySchema, boundsQuerySchema } from "../validation/geo.ts";
+import { searchQuerySchema } from "../validation/search.ts";
 import { distanceMeters, isInBounds } from "../geo/distance.ts";
 import type {
   DiscoveryPerson,
@@ -166,4 +167,26 @@ export function demoCemeteryProfile(
       },
     ],
   };
+}
+
+/** Approximates search_people's per-word prefix-AND matching without a real
+ *  tsvector index: every query word must prefix-match some word in the
+ *  person's name. Relevance ranking isn't replicated offline — this only
+ *  needs to return the same matches for local development, not the same
+ *  order as ts_rank. */
+export function demoSearchPeople(input: Seed, query: unknown): DiscoveryPerson[] {
+  const { q, result_limit } = searchQuerySchema.parse(query);
+  const words = q
+    .toLowerCase()
+    .split(/\s+/)
+    .map((w) => w.replace(/[^a-z0-9]/g, ""))
+    .filter((w) => w.length > 0);
+  if (words.length === 0) return [];
+  return demoPeople(input)
+    .filter((p) => {
+      const nameWords = p.name.toLowerCase().split(/\s+/);
+      return words.every((w) => nameWords.some((nw) => nw.startsWith(w)));
+    })
+    .sort((a, b) => b.dead_score - a.dead_score || a.id.localeCompare(b.id))
+    .slice(0, result_limit);
 }
