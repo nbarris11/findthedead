@@ -6,11 +6,11 @@ Start in Detroit and Southeast Michigan; accept arbitrary global coordinates thr
 
 ## This release
 
-Milestones 1–2 only: locally runnable Next.js foundation, restrained homepage, documented product decisions, PostGIS schema, development seeds, geographic query contracts, validation, and tests. The final sentence of the first assignment says the map is next; therefore `/explore` is deliberately deferred. Homepage preview links scroll to existing content. Do not offer nonfunctional location/map buttons.
+Milestones 1–3: locally runnable Next.js foundation, restrained homepage, documented product decisions, PostGIS schema, development seeds, geographic query contracts, validation, tests, and the `/explore` map. The homepage's primary and secondary CTAs both lead to `/explore`; "Find the dead near me" is the visitor asking the map for their location, not a separate flow. Map pins open an accessible bottom sheet with the person's story, cemetery, distance (once location is shared), precision-aware directions, and a link to their profile — the visitor stays on the map rather than being bounced away. A cluster whose burials share one coordinate (common at cemetery precision) hands off to a plain list instead of spinning at maximum zoom. Category and "Notable only" filters are data-driven from the `categories` table. If `NEXT_PUBLIC_MAPBOX_TOKEN` is unset, `/explore` degrades to an accessible list of the same records rather than a broken page.
 
 ## Next experience
 
-Navigation: Explore, Search, Nearby, Saved (future placeholder). Map pins open an accessible bottom sheet rather than immediately navigating. Nearby supports 5/10/25/50 miles and nearest, notable, or newly added ordering. Profiles distinguish exact grave, section, cemetery, approximate, and unknown precision. Exact coordinates do not establish public access; cemetery visiting rules still apply.
+Navigation: Explore, Search, Nearby, Saved (future placeholder) — only Explore exists as a real route today. Nearby supports 5/10/25/50 miles and nearest, notable, or newly added ordering. Profiles (`/people/[slug]`, `/cemeteries/[slug]`) distinguish exact grave, section, cemetery, approximate, and unknown precision; the explore sheet's "View profile" link already points there ahead of the pages existing. Exact coordinates do not establish public access; cemetery visiting rules still apply.
 
 ## Editorial policy
 

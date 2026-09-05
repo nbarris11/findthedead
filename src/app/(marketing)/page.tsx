@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { featuredPeople } from "@/lib/data/repository";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -25,9 +26,14 @@ export default async function Home() {
             <br />
             Extraordinary lives, closer than you think.
           </p>
-          <a className="button" href="#discovery">
-            Meet the first stories <span aria-hidden="true">↗</span>
-          </a>
+          <div className="cta-group">
+            <Link className="button" href="/explore">
+              Find the dead near me <span aria-hidden="true">↗</span>
+            </Link>
+            <Link className="button-secondary" href="/explore">
+              Explore the map
+            </Link>
+          </div>
           <p className="preview-note">
             Detroit & Southeast Michigan · Early preview
           </p>
@@ -108,8 +114,8 @@ export default async function Home() {
           room to explore everywhere.
         </p>
         <p className="muted">
-          This is the foundation preview. The interactive map and nearby
-          discovery are coming next.
+          This is the foundation preview. The interactive map is live;
+          location-based nearby discovery is coming next.
         </p>
       </section>
     </main>

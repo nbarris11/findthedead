@@ -10,6 +10,7 @@ import type {
   Database,
   NearbyPerson,
   DiscoveryPerson,
+  CategoryOption,
 } from "../../types/database";
 
 const seed = seedSchema.parse(seedInput);
@@ -73,3 +74,22 @@ export const featuredPeople = cache(async () => {
     throw new Error("Featured records could not be loaded", { cause: error });
   return { isDemo: false, people: data ?? [] };
 });
+
+/** Categories drive the explore filters, so the UI never hardcodes them.
+ *  Request-level deduplication only; the list carries no visitor data. */
+export const discoveryCategories = cache(
+  async (): Promise<CategoryOption[]> => {
+    if (dataConfig(process.env).mode === "demo") {
+      return [...seed.categories]
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(({ slug, name }) => ({ slug, name }));
+    }
+    const { data, error } = await client()
+      .from("categories")
+      .select("slug,name")
+      .order("sort_order", { ascending: true });
+    if (error)
+      throw new Error("Categories could not be loaded", { cause: error });
+    return data ?? [];
+  },
+);
