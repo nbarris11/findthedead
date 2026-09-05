@@ -122,3 +122,24 @@ h3 { font: 2rem/1.15 Georgia, serif; margin: 2rem 0 1rem; }
 .person-card .description { color: var(--foreground); margin: 0 0 .75rem; }
 .person-card-meta { display: flex; flex-wrap: wrap; gap: .25rem 1rem; color: var(--muted); font-size: .8125rem; }
 @media (max-width: 760px) { .person-card-link { padding: 1rem 1.25rem; } }
+
+/* Profiles: /people/[slug] and /cemeteries/[slug] */
+.profile-page { padding-block: 3rem 5rem; }
+.profile-page article { max-width: 44rem; }
+.profile-hero { margin-bottom: 2rem; }
+.profile-hero h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); letter-spacing: -.03em; margin: 0 0 .75rem; }
+.profile-hero .lifespan { color: var(--accent); font-size: .9375rem; letter-spacing: .04em; margin-bottom: 1rem; }
+.profile-page section { margin-block: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
+.profile-page section h2 { font-size: 1.375rem; margin: 0 0 1rem; }
+.profile-page section p { margin: 0 0 1rem; }
+.category-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.profile-map { position: relative; height: 320px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 1rem; }
+.profile-map-mount { width: 100%; height: 100%; }
+.profile-map-fallback { display: grid; place-items: center; background: #17221b; }
+.source-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .6rem; }
+.related-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .25rem; }
+.related-list li { border-bottom: 1px solid var(--line); }
+.related-list a { display: block; padding: .9rem 0; }
+.related-list a:hover .list-name, .related-list a:focus-visible .list-name { color: var(--accent); }
+.related-list .list-name { font-weight: 700; display: block; }
+.related-list .list-meta { color: var(--muted); font-size: .8125rem; }

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { slugSchema } from "./slug.ts";
 export const coordinatesSchema = z.object({
   latitude: z.number().finite().min(-90).max(90),
   longitude: z.number().finite().min(-180).max(180),
@@ -13,11 +14,7 @@ export const boundsSchema = z
   .refine((b) => b.south <= b.north, "South must not exceed north");
 const queryOptions = {
   min_score: z.number().int().min(0).max(100).default(0),
-  category_slug: z
-    .string()
-    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/)
-    .nullable()
-    .default(null),
+  category_slug: slugSchema.nullable().default(null),
   result_limit: z.number().int().min(1).max(200).default(100),
 };
 export const nearbyQuerySchema = coordinatesSchema.extend({

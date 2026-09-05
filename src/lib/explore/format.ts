@@ -36,3 +36,17 @@ export function pluralizePeople(count: number): string {
     ? "1 interesting dead person"
     : `${count} interesting dead people`;
 }
+
+/** External directions rather than in-app turn-by-turn (see docs/PRODUCT.md).
+ *  Takes whichever coordinate the caller has — exact grave or cemetery
+ *  centroid — and never claims more precision than that point represents. */
+export function directionsUrl(coordinates: {
+  latitude: number;
+  longitude: number;
+}): string {
+  const params = new URLSearchParams({
+    api: "1",
+    destination: `${coordinates.latitude},${coordinates.longitude}`,
+  });
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}

@@ -11,6 +11,9 @@ begin
   if (select count(*) from public.people_in_bounds(-84,42,-82,43)) <> 22 then raise exception 'Bounds lookup failed'; end if;
   if (select count(*) from public.cemeteries_in_bounds(-84,42,-82,43)) <> 2 then raise exception 'Cemetery bounds failed'; end if;
   if (select count(*) from public.sources) <> 46 then raise exception 'Published provenance inaccessible'; end if;
+  if (select count(*) from public.cemetery_by_slug('woodlawn-detroit')) <> 1 then raise exception 'Cemetery by slug failed'; end if;
+  if (select round(latitude::numeric,4) from public.cemetery_by_slug('woodlawn-detroit')) <> 42.4419 then raise exception 'Cemetery by slug coordinates wrong'; end if;
+  if (select count(*) from public.cemetery_by_slug('no-such-cemetery')) <> 0 then raise exception 'Cemetery by slug should be empty for unknown slug'; end if;
 end;
 $$;
 reset role;
@@ -36,6 +39,7 @@ do $$
 begin
   if (select count(*) from public.burials) <> 10 then raise exception 'Burials expose hidden cemetery'; end if;
   if (select count(*) from public.people_in_bounds(-180,-90,180,90)) <> 10 then raise exception 'Discovery exposes hidden cemetery'; end if;
+  if (select count(*) from public.cemetery_by_slug('woodlawn-detroit')) <> 0 then raise exception 'Cemetery by slug exposes hidden cemetery'; end if;
 end;
 $$;
 reset role;

@@ -121,6 +121,46 @@ export type CemeteryPoint = Pick<
   CemeteryRow,
   "id" | "slug" | "name" | "city" | "state" | "country"
 > & { latitude: number; longitude: number };
+
+export type ProfileSource = Pick<
+  SourceRow,
+  "source_type" | "url" | "field" | "retrieved_at" | "confidence" | "notes"
+>;
+export type ProfileImage = Pick<
+  ImageRow,
+  "url" | "alt_text" | "creator" | "license" | "attribution" | "is_primary"
+>;
+export type ProfileCemetery = Pick<
+  CemeteryRow,
+  "slug" | "name" | "city" | "state" | "country" | "website_url"
+>;
+export type CemeteryProfileRow = Pick<
+  CemeteryRow,
+  "id" | "slug" | "name" | "description" | "city" | "state" | "country" | "website_url"
+>;
+/** Full detail for /people/[slug]: everything DiscoveryPerson has (dates,
+ *  score, coordinates, precision, categories) plus the fields a discovery
+ *  feed has no use for. */
+export type ProfilePerson = DiscoveryPerson & {
+  birth_date: string | null;
+  death_date: string | null;
+  biography: string | null;
+  why_interesting: string | null;
+  wikidata_id: string | null;
+  wikipedia_url: string | null;
+  cemetery: ProfileCemetery | null;
+  images: ProfileImage[];
+  sources: ProfileSource[];
+};
+export type CemeteryProfile = ProfileCemetery & {
+  id: string;
+  description: string | null;
+  latitude: number;
+  longitude: number;
+  people: DiscoveryPerson[];
+  categories: CategoryOption[];
+  sources: ProfileSource[];
+};
 type Table<Row, Required extends keyof Row> = {
   Row: Row;
   Insert: Pick<Row, Required> & Partial<Omit<Row, Required>>;
@@ -174,6 +214,10 @@ export type Database = {
       cemeteries_in_bounds: {
         Args: BoundsArgs & { result_limit?: number };
         Returns: CemeteryPoint[];
+      };
+      cemetery_by_slug: {
+        Args: { p_slug: string };
+        Returns: (CemeteryProfileRow & { latitude: number; longitude: number })[];
       };
       query_envelopes: { Args: BoundsArgs; Returns: string[] };
     };

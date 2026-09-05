@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { DiscoveryPerson } from "@/types/database";
 import {
+  directionsUrl,
   formatDistance,
   formatLifespan,
   formatPrecision,
@@ -13,14 +14,6 @@ type PersonSheetProps = {
   distanceMeters: number | null;
   onClose: () => void;
 };
-
-function directionsUrl(person: DiscoveryPerson): string {
-  const params = new URLSearchParams({
-    api: "1",
-    destination: `${person.latitude},${person.longitude}`,
-  });
-  return `https://www.google.com/maps/dir/?${params.toString()}`;
-}
 
 /** A single person's detail. Mounted from the map (a marker tap) or from a
  *  cluster's leaf list, so it never assumes how the visitor arrived. */

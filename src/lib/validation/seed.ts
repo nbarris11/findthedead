@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { coordinatesSchema } from "./geo.ts";
-const slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+import { slugSchema as slug } from "./slug.ts";
 const source = z
   .url()
   .refine((s) => s.startsWith("https://"), "Sources must use HTTPS");
