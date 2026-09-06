@@ -1,12 +1,13 @@
 /** Bounded Wikidata proof of concept (Milestone 7). Fetches deceased people
- *  with a documented place of burial near Detroit, normalizes them,
- *  dedupes against the existing development seed, and writes a reviewable
- *  run file. Makes exactly one network request. Never writes to any
- *  database — see src/lib/ingestion/publish.ts and
+ *  with a documented place of burial near a given city (Detroit by default),
+ *  normalizes them, dedupes against the existing development seed, and
+ *  writes a reviewable run file. Makes exactly one network request. Never
+ *  writes to any database — see src/lib/ingestion/publish.ts and
  *  scripts/publish-reviewed-candidates.ts for the separate, explicit,
  *  human-gated step that does. See docs/DATA-SOURCES.md for the full policy.
  *
  *  Usage: npm run ingest:wikidata -- [--limit N] [--radius-km N]
+ *                                    [--lat N --lon N --label "City, ST"]
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { randomUUID } from "node:crypto";
@@ -28,9 +29,28 @@ function readIntArg(flag: string, fallback: number): number {
   return value;
 }
 
+function readFloatArg(flag: string, fallback: number): number {
+  const index = process.argv.indexOf(flag);
+  if (index === -1) return fallback;
+  const value = Number(process.argv[index + 1]);
+  if (!Number.isFinite(value)) throw new Error(`${flag} must be a number`);
+  return value;
+}
+
+function readStringArg(flag: string, fallback: string): string {
+  const index = process.argv.indexOf(flag);
+  if (index === -1) return fallback;
+  const value = process.argv[index + 1];
+  if (!value) throw new Error(`${flag} needs a value`);
+  return value;
+}
+
 async function main() {
   const limit = Math.min(readIntArg("--limit", 25), MAX_LIMIT);
   const radiusKm = readIntArg("--radius-km", 40);
+  const latitude = readFloatArg("--lat", DEFAULT_VIEW.latitude);
+  const longitude = readFloatArg("--lon", DEFAULT_VIEW.longitude);
+  const label = readStringArg("--label", "Detroit");
 
   const seedPath = new URL("../data/detroit.seed.json", import.meta.url);
   const seed = seedSchema.parse(JSON.parse(readFileSync(seedPath, "utf8")));
@@ -39,17 +59,12 @@ async function main() {
   // this set exists so the check is already correct once one does.
   const existingWikidataIds = new Set<string>();
 
-  const query = buildBurialRadiusQuery(
-    DEFAULT_VIEW.latitude,
-    DEFAULT_VIEW.longitude,
-    radiusKm,
-    limit,
-  );
+  const query = buildBurialRadiusQuery(latitude, longitude, radiusKm, limit);
   const sourceUrl = `https://query.wikidata.org/sparql?query=${encodeURIComponent(query)}&format=json`;
   const retrievedAt = new Date().toISOString();
 
   console.log(
-    `Querying Wikidata: deceased people with a place of burial within ${radiusKm}km of Detroit (limit ${limit})...`,
+    `Querying Wikidata: deceased people with a place of burial within ${radiusKm}km of ${label} (limit ${limit})...`,
   );
   const response = await runSparqlQuery(query);
   const candidates = normalizeSparqlResults(response, retrievedAt, sourceUrl);
@@ -60,7 +75,7 @@ async function main() {
     started_at: retrievedAt,
     finished_at: new Date().toISOString(),
     source: "wikidata",
-    query_description: `Deceased people (P31 human) with a documented place of burial (P119) within ${radiusKm}km of Detroit`,
+    query_description: `Deceased people (P31 human) with a documented place of burial (P119) within ${radiusKm}km of ${label}`,
     candidate_count: deduped.length,
     new_count: deduped.filter((c) => c.dedupe_status === "new").length,
     possible_duplicate_count: deduped.filter((c) => c.dedupe_status === "possible_duplicate").length,

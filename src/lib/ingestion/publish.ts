@@ -92,6 +92,8 @@ export async function publishReviewedCandidate(
       wikidata_id: candidate.wikidata_id,
       wikipedia_url: candidate.wikipedia_url,
       short_description: candidate.short_description,
+      biography: candidate.biography ?? null,
+      why_interesting: candidate.why_interesting ?? null,
       dead_score: candidate.dead_score,
       status: "draft",
       is_fixture: false,
@@ -131,6 +133,20 @@ export async function publishReviewedCandidate(
       notes: null,
       person_id: person.id,
     },
+    ...(candidate.profile_source_url
+      ? [
+          {
+            source_type: "wikipedia" as const,
+            url: candidate.profile_source_url,
+            external_id: null,
+            retrieved_at: new Date().toISOString(),
+            field: "biography,why_interesting",
+            confidence: 0.8,
+            notes: "Person's own article; biography paraphrased, not copied.",
+            person_id: person.id,
+          },
+        ]
+      : []),
     {
       source_type: "wikidata" as const,
       url: wikidataUrl,
