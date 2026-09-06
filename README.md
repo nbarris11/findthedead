@@ -52,7 +52,7 @@ Live at [findthedead.netlify.app](https://findthedead.netlify.app) on Netlify, c
 
 Environment variables (`NEXT_PUBLIC_SITE_URL`, `DATA_MODE=supabase`, the Supabase URL/publishable key, the Mapbox token) are set directly in Netlify's project configuration, not committed. `SUPABASE_SERVICE_ROLE_KEY` is intentionally not set there — the deployed app never needs it; only the offline ingestion scripts (below) do.
 
-The deployed site currently shows the honest empty state ("The first stories are being prepared") — real infrastructure, real database, no published content yet. That's a deliberate, separate editorial decision (see docs/ROADMAP.md).
+All 24 reviewed people (the dev seed plus two Wikidata-sourced additions) and all 3 cemeteries are published on the live project as of 2026-09-05, on the product owner's explicit direction — see docs/ROADMAP.md for what was verified afterward. Publishing more, or anything new from the ingestion pipeline, remains the same explicit, human-run step described below; nothing here does it automatically.
 
 ## Local Supabase database
 
@@ -69,7 +69,7 @@ supabase gen types --local --lang typescript --schema public > src/types/databas
 
 **`db reset --local` deletes and recreates this local development database.** Use it only when local data is disposable. It applies all five migrations and loads the 22-person development seed. Never use this seed/reset procedure against production.
 
-Copy the local project URL and publishable (or legacy anon) key printed by `supabase start` into `.env.local`, set `DATA_MODE=supabase`, and restart Next.js. All seed people and cemeteries are deliberately drafts, so anonymous database mode initially shows the empty state. Continue using demo mode to inspect source-backed development content. Publish only individually reviewed records, with both the person and cemetery approved; removing `is_fixture` and setting `status=published` is a trusted editorial operation. Never give the public app a service-role key to bypass this.
+Copy the local project URL and publishable (or legacy anon) key printed by `supabase start` into `.env.local`, set `DATA_MODE=supabase`, and restart Next.js. A *fresh* local instance seeded this way starts with every person and cemetery still a draft, so anonymous database mode initially shows the empty state (the live production project has since been published for real — see Deployment, above). Continue using demo mode to inspect source-backed development content. Publish only individually reviewed records, with both the person and cemetery approved; removing `is_fixture` and setting `status=published` is a trusted editorial operation. Never give the public app a service-role key to bypass this.
 
 ## Database verification without Docker
 

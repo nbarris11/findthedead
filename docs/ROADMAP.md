@@ -35,3 +35,9 @@ The app is live on Netlify at `findthedead.netlify.app`, connected to `github.co
 This surfaced one real bug: `dataConfig`'s demo-mode safety guard checked `VERCEL_ENV === "production"` specifically — a platform variable Netlify never sets, so the guard would have silently done nothing on this host. Fixed to check `NODE_ENV === "production"` instead, which every host sets for a production Next.js build regardless of platform (`src/lib/data/config.ts`).
 
 `SUPABASE_SERVICE_ROLE_KEY` was deliberately not set on Netlify — the running app never needs it, only the offline ingestion scripts do — keeping the deployed app's credential surface to exactly the anon publishable key.
+
+## Publication status
+
+All 24 reviewed records — the 22-person Detroit dev seed and the two Wikidata-sourced additions from the Milestone 7 proof of concept (David Dunbar Buick, Henry M. Leland) — plus all 3 cemeteries (Woodlawn, Elmwood, Woodmere) are now `status='published', is_fixture=false` on the live project. This was a direct, explicit, human-requested action (`UPDATE ... WHERE status='draft'` via the service-role client), not an automatic side effect of anything the app or the ingestion scripts do on their own — publication remains exactly the "trusted editorial operation" docs/DATABASE.md always described it as.
+
+Verified against the live deployment, not just the database: `findthedead.netlify.app` now shows real featured people on the homepage, three real clusters (12/10/2) on `/explore`, working profile pages for both seed people (Rosa Parks) and the ingested addition (David Dunbar Buick, correctly cross-linked to seed people in "Nearby interesting people"), and `/search` returning real results ("leland" → Henry M. Leland). The product now actually does what docs/PRODUCT.md describes, for real visitors, on the real domain.
