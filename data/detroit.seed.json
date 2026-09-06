@@ -96,11 +96,11 @@
       "name": "Aretha Franklin",
       "birth_year": 1942,
       "death_year": 2018,
-      "birth_date": null,
+      "birth_date": "1942-03-25",
       "death_date": null,
       "short_description": "Soul vocalist.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "Grew up in Detroit as the daughter of a prominent Baptist minister, and had already recorded gospel albums as a teenager before signing with Atlantic Records in 1966. Her string of hits — including a 1967 recording of “Respect” that took on new meaning as a civil-rights and feminist anthem — carried her to 18 Grammy Awards and made her, in 1987, the first woman inducted into the Rock and Roll Hall of Fame. She died of pancreatic cancer in 2018, having sold more than 75 million records worldwide.",
+      "why_interesting": "The best-selling female recording artist in American history, and the voice most identified with the word “Respect.”",
       "dead_score": 98,
       "categories": [
         "music"
@@ -110,7 +110,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": true
+      "is_featured": true,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Aretha_Franklin&oldid=1372910320"
     },
     {
       "id": "468fbec4-9b0e-5f01-9787-50f41f422286",
@@ -118,11 +119,11 @@
       "name": "Rosa Parks",
       "birth_year": 1913,
       "death_year": 2005,
-      "birth_date": null,
+      "birth_date": "1913-02-04",
       "death_date": null,
       "short_description": "Civil rights advocate.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "A Montgomery seamstress and longtime NAACP chapter secretary, she had already investigated cases of racial violence for years before her refusal to give up a bus seat on December 1, 1955 triggered a 381-day boycott that helped dismantle Southern bus segregation. She later moved to Detroit, worked for decades as an aide to Congressman John Conyers, and co-founded an institute for youth leadership development. She received the Presidential Medal of Freedom in 1996 and died in 2005.",
+      "why_interesting": "Her refusal to move seats on a Montgomery bus became one of the defining acts of the civil rights movement.",
       "dead_score": 99,
       "categories": [
         "history"
@@ -132,7 +133,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": true
+      "is_featured": true,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Rosa_Parks&oldid=1373136471"
     },
     {
       "id": "832c7114-a4ba-5038-a420-5afac54cca76",
@@ -140,11 +142,11 @@
       "name": "Edsel Ford",
       "birth_year": 1893,
       "death_year": 1943,
-      "birth_date": null,
+      "birth_date": "1893-11-06",
       "death_date": null,
       "short_description": "Led Ford Motor Company.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "The only child of Henry Ford, he became president of Ford Motor Company in 1919 and spent his tenure pushing the company past the aging Model T, overseeing the Model A, the Lincoln-Zephyr, and the creation of Ford's Mercury division. During World War II he directed the Willow Run bomber plant toward a goal of one B-24 built per hour. An avid patron of the arts, he commissioned Diego Rivera's Detroit Industry murals for the Detroit Institute of Arts and helped fund Richard Byrd's Antarctic expeditions. He died in 1943 at age 49, and his nonvoting stock later formed the basis of the Ford Foundation.",
+      "why_interesting": "Ran Ford Motor Company through the Model A and Willow Run's wartime bomber line, while quietly building one of Detroit's great art collections.",
       "dead_score": 88,
       "categories": [
         "business"
@@ -154,7 +156,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": true
+      "is_featured": true,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Edsel_Ford&oldid=1371028589"
     },
     {
       "id": "e0bec093-e813-5985-bd05-8cd60a8413a7",
@@ -162,11 +165,11 @@
       "name": "John Dodge",
       "birth_year": 1864,
       "death_year": 1920,
-      "birth_date": null,
+      "birth_date": "1864-10-25",
       "death_date": null,
       "short_description": "Helped establish Dodge.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "Alongside his brother Horace, he ran a Detroit machine shop that became a critical parts supplier to the young Ford Motor Company, building Ford's engines and transmissions for a decade while John also served as a Ford vice president. In 1914 the brothers broke away to build cars under their own name, launching Dodge Brothers Company and pairing his sales and business sense with Horace's engineering. He died suddenly of pneumonia during the 1918 influenza pandemic while on a business trip to New York; the company his widow later sold for $146 million became the foundation of the modern Dodge brand.",
+      "why_interesting": "Built Ford's early engines before breaking away to found Dodge — and died of the same 1918 flu pandemic that killed millions worldwide.",
       "dead_score": 85,
       "categories": [
         "business"
@@ -176,7 +179,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=John_Francis_Dodge&oldid=1364111804"
     },
     {
       "id": "da14eb73-4a84-5361-82ca-8d7facd2b585",
@@ -184,11 +188,11 @@
       "name": "Horace Dodge",
       "birth_year": 1868,
       "death_year": 1920,
-      "birth_date": null,
+      "birth_date": "1868-05-17",
       "death_date": null,
       "short_description": "Helped establish Dodge.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "The mechanically minded half of the Dodge brothers, he is credited with inventing an early dirt-proof ball bearing and ran the technical side of the machine shop that supplied engines and transmissions to Ford Motor Company for a decade. In 1914 he and John launched their own automobile under the Dodge Brothers name, and stock Ford later repurchased from the brothers for $25 million helped make both men wealthy. He and his wife Anna became major Detroit philanthropists, building the Rose Terrace mansion in Grosse Pointe and backing the Detroit Symphony Orchestra. He died in 1920, less than a year after his brother John.",
+      "why_interesting": "The engineering half of the Dodge brothers, whose parts built Ford's early cars before his own name went on the hood.",
       "dead_score": 85,
       "categories": [
         "business"
@@ -198,7 +202,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Horace_Elgin_Dodge&oldid=1364111555"
     },
     {
       "id": "94ba1a2f-cb0c-53cf-a955-5d8058d40b45",
@@ -209,8 +214,8 @@
       "birth_date": null,
       "death_date": null,
       "short_description": "Played bass for Motown.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "Raised on Edisto Island, South Carolina before his family moved to Detroit, he became the uncredited bass player behind dozens of Motown's biggest hits as a member of the studio band later known as the Funk Brothers. His inventive, syncopated bass lines — heard on records by the Supremes, the Temptations, and Marvin Gaye — appear on 23 number-one pop singles, a run exceeded only by Paul McCartney. He remained largely unrecognized by the public during his lifetime and died in 1983; he was inducted into the Rock and Roll Hall of Fame in 2000 and has since been ranked by multiple music publications as the greatest bassist in popular music history. Some sources, including Motown's own records, list his birth year as 1936 rather than the 1938 given here, a discrepancy biographers have never fully resolved.",
+      "why_interesting": "Played bass on more number-one hits than almost anyone in pop history, and Motown fans didn't learn his name until decades later.",
       "dead_score": 92,
       "categories": [
         "music"
@@ -220,7 +225,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=James_Jamerson&oldid=1373098954"
     },
     {
       "id": "8b1fdb9f-76fe-58be-92ed-1f5a792cd5ed",
@@ -228,11 +234,11 @@
       "name": "David Ruffin",
       "birth_year": 1941,
       "death_year": 1991,
-      "birth_date": null,
+      "birth_date": "1941-01-18",
       "death_date": null,
       "short_description": "Sang with the Temptations.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "Raised in rural Mississippi, he became lead singer of the Temptations in 1964 and fronted the group's best-known lineup through hits including “My Girl” and “Ain't Too Proud to Beg,” his raspy, urgent tenor helping define the Motown sound of the era. Fired from the group in 1968, he built a solo career with hits like “My Whole World Ended,” and was inducted into the Rock and Roll Hall of Fame with the Temptations in 1989. He struggled with cocaine addiction for much of his life and died of an overdose in Philadelphia in 1991 at age 50.",
+      "why_interesting": "The voice on “My Girl,” whose solo career never escaped the shadow of the group that fired him.",
       "dead_score": 89,
       "categories": [
         "music"
@@ -242,7 +248,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=David_Ruffin&oldid=1371005890"
     },
     {
       "id": "2d951d78-04cb-536d-8f9f-ce193f21a5eb",
@@ -250,11 +257,11 @@
       "name": "Levi Stubbs",
       "birth_year": 1936,
       "death_year": 2008,
-      "birth_date": null,
+      "birth_date": "1936-06-06",
       "death_date": null,
       "short_description": "Sang with the Four Tops.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "The lead singer of the Four Tops for their entire five-decade career, he fronted the Motown group through more than a dozen hits and was inducted into the Rock and Roll Hall of Fame in 1990. Despite offers to go solo, he stayed with the same three bandmates his whole career, and expanded into voice acting, playing the man-eating plant Audrey II in the 1986 film Little Shop of Horrors. He gave his final concert performance at the Four Tops' 50th-anniversary show in Detroit in 2004, and died of cancer in 2008.",
+      "why_interesting": "Turned down solo stardom to stay with the Four Tops for fifty years — and gave a carnivorous plant its singing voice.",
       "dead_score": 89,
       "categories": [
         "music"
@@ -264,7 +271,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Levi_Stubbs&oldid=1371037915"
     },
     {
       "id": "7877fd69-c3db-5471-bbf8-1aec34a0a96d",
@@ -272,11 +280,11 @@
       "name": "Ed Killian",
       "birth_year": 1876,
       "death_year": 1928,
-      "birth_date": null,
+      "birth_date": "1876-11-12",
       "death_date": null,
       "short_description": "Pitched in major-league baseball.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "A left-handed pitcher nicknamed “Twilight Ed” for his knack of stretching games into extra innings before darkness called them, he anchored the Detroit Tigers' pitching staff through three consecutive American League pennants from 1907 to 1909. He once lost a 15-inning scoreless duel to Cy Young by a single run in 1904, and at one stretch went 1,001 innings without allowing a home run — still among the longest such streaks in major-league history. He finished his career with a 103–78 record and a 2.38 ERA, and died in 1928.",
+      "why_interesting": "Went over 1,000 innings without giving up a home run while helping pitch the Tigers to three straight pennants.",
       "dead_score": 65,
       "categories": [
         "sports"
@@ -286,7 +294,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Ed_Killian&oldid=1321826825"
     },
     {
       "id": "9df5ce48-8ae3-5d08-9294-65a19c3f3218",
@@ -294,11 +303,11 @@
       "name": "Roy D. Chapin",
       "birth_year": 1880,
       "death_year": 1936,
-      "birth_date": null,
+      "birth_date": "1880-02-23",
       "death_date": null,
       "short_description": "Automotive leader and commerce secretary.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "A Lansing native who co-founded Hudson Motor Car Company in 1908, he built it into one of the most profitable independent automakers of the 1920s, and in 1922 his Hudson subsidiary Essex introduced the first affordable mass-produced enclosed car, changing what buyers expected from an ordinary automobile. He briefly left the industry to serve as U.S. Secretary of Commerce under President Hoover from 1932 to 1933, then returned to lead Hudson through the early Depression years until his death in 1936. He was also a longtime advocate for the Lincoln Highway and better American roads.",
+      "why_interesting": "Built Hudson into a major automaker, put the first affordable enclosed car on the road, and briefly ran the U.S. Commerce Department.",
       "dead_score": 76,
       "categories": [
         "business",
@@ -309,7 +318,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Roy_D._Chapin&oldid=1364906019"
     },
     {
       "id": "7bf0d432-70b0-5b5d-8796-ff38dda5d0c4",
@@ -320,8 +330,8 @@
       "birth_date": null,
       "death_date": null,
       "short_description": "Designed automotive technology.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "As teenagers in Bradford, Pennsylvania, George Holley and his brother Earl built a three-wheeled, one-cylinder “Runabout” capable of 30 miles per hour, and by 1902 were selling a four-wheeled car called the Holley Motorette. Their carburetor design caught Henry Ford's attention, and the Model T contract that followed made Holley Carburetor Company, formally established in Detroit in 1905, one of Ford's key suppliers; by 1913 Holley carburetors equipped more than half of the cars leaving American factories. George later served as company president and sat on the boards of several aviation firms during the 1920s and 1930s. He died in 1963.",
+      "why_interesting": "His carburetor design ended up under the hood of most American cars built by the 1910s.",
       "dead_score": 72,
       "categories": [
         "inventors",
@@ -332,7 +342,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Holley_Performance_Products&oldid=1370417128"
     },
     {
       "id": "27713897-8883-537c-be67-63c3703ee029",
@@ -340,11 +351,11 @@
       "name": "Clara Arthur",
       "birth_year": 1858,
       "death_year": 1929,
-      "birth_date": null,
+      "birth_date": "1858-10-25",
       "death_date": null,
       "short_description": "Advocated for women’s voting rights.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "Born in Saint John, New Brunswick, she co-founded the Michigan Equal Suffrage Association in 1885 and led it as president from 1906 through the final push for the vote. She first won a partial victory, amending Michigan's constitution to let women vote on tax and bond questions, before leading the statewide campaign that secured full women's suffrage in Michigan in 1918 — two years ahead of the federal 19th Amendment. She also served on the National Child Labor Committee, and died in 1929.",
+      "why_interesting": "Won women in Michigan the right to vote two years before the 19th Amendment made it national.",
       "dead_score": 72,
       "categories": [
         "history"
@@ -354,7 +365,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Woodlawn_Cemetery_(Detroit)&oldid=1365624171",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Clara_Arthur&oldid=1341439821"
     },
     {
       "id": "02e37930-2dcb-5628-a702-7c717071e7e5",
@@ -362,11 +374,11 @@
       "name": "Coleman Young",
       "birth_year": 1918,
       "death_year": 1997,
-      "birth_date": null,
+      "birth_date": "1918-05-24",
       "death_date": null,
       "short_description": "Led Detroit as mayor.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "Born in Alabama and raised in Detroit, he became the city's first Black mayor in 1974 after a campaign centered on police reform, and went on to serve an unprecedented five terms. He disbanded the controversial STRESS police unit and pushed affirmative-action hiring that raised Black representation on the police force from under 10 percent to more than half by the early 1990s, while backing major downtown projects like the Renaissance Center and the Detroit People Mover. His twenty years in office also coincided with a loss of roughly 500,000 residents from the city, a decline driven by white flight and the collapse of manufacturing jobs that he spent his tenure fighting. He died in 1997, four years after leaving office.",
+      "why_interesting": "Detroit's first Black mayor, in office for twenty years spanning the city's most dramatic population decline.",
       "dead_score": 90,
       "categories": [
         "politics"
@@ -376,7 +388,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Coleman_Young&oldid=1367973457"
     },
     {
       "id": "7e5ddc37-8cd8-51b8-827e-4d46e4928111",
@@ -384,11 +397,11 @@
       "name": "Russell A. Alger",
       "birth_year": 1836,
       "death_year": 1907,
-      "birth_date": null,
+      "birth_date": "1836-02-27",
       "death_date": null,
       "short_description": "Served as Michigan governor.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "An Ohio-born lawyer who moved to Michigan and made a fortune in Upper Peninsula lumber, he had already fought in 66 Civil War engagements and risen to brevet major general by the time he was elected Michigan's governor in 1884. He later served as U.S. Secretary of War under President McKinley from 1897 to 1899, a tenure defined by criticism over the military's poor preparation for the Spanish-American War, and finished his career appointed to the U.S. Senate, where he chaired the Pacific Railroads committee until his death in 1907.",
+      "why_interesting": "Went from Civil War general to Michigan governor to a wartime cabinet post that ended in controversy over an unprepared Army.",
       "dead_score": 78,
       "categories": [
         "politics"
@@ -398,7 +411,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Russell_A._Alger&oldid=1372769639"
     },
     {
       "id": "9dbb7377-b309-5293-b64d-94fdf1120b37",
@@ -406,11 +420,11 @@
       "name": "Lewis Cass",
       "birth_year": 1782,
       "death_year": 1866,
-      "birth_date": null,
+      "birth_date": "1782-10-09",
       "death_date": null,
       "short_description": "Governed Michigan Territory.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "A New Hampshire-born lawyer who came west as territorial governor of Michigan in 1813, he spent nearly two decades negotiating treaties that opened Native American land to American settlement, then went on to serve as Secretary of War under Andrew Jackson, where he became a central figure in carrying out the era's Indian removal policy. He later represented Michigan in the U.S. Senate across two separate stretches, won the Democratic presidential nomination in 1848 (losing to Zachary Taylor after his position on slavery's expansion split the party), and served as Secretary of State under James Buchanan before resigning over the government's response to Southern secession. He died in Detroit in 1866.",
+      "why_interesting": "Governed Michigan Territory, ran for president in 1848, and helped carry out the federal policy that forced Native nations off their land.",
       "dead_score": 78,
       "categories": [
         "politics",
@@ -421,7 +435,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Lewis_Cass&oldid=1363707794"
     },
     {
       "id": "ca959d4e-a59a-5f01-9f9a-b8e7a13e4fab",
@@ -429,11 +444,11 @@
       "name": "Zachariah Chandler",
       "birth_year": 1813,
       "death_year": 1879,
-      "birth_date": null,
+      "birth_date": "1813-12-10",
       "death_date": null,
       "short_description": "Represented Michigan in the Senate.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "A New Hampshire native who built a fortune in Detroit dry goods before entering politics, he became a founding force in Michigan's Republican Party and a leading voice of its antislavery wing. He represented Michigan in the U.S. Senate for four terms starting in 1857, chairing the Commerce Committee and pushing hard against secession in the years before the Civil War, then served as Secretary of the Interior under President Grant, where he moved aggressively against corrupt federal agents. He chaired the Republican National Committee during Rutherford B. Hayes's contested 1876 campaign, and died in 1879, the morning after delivering a political speech in Chicago.",
+      "why_interesting": "Helped found Michigan's Republican Party, then ran Hayes's national campaign a century before dying mid-comeback in 1879.",
       "dead_score": 76,
       "categories": [
         "politics"
@@ -443,7 +458,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Zachariah_Chandler&oldid=1364817250"
     },
     {
       "id": "f31d3b3c-33c0-5cd8-9997-5ebec413eceb",
@@ -451,11 +467,11 @@
       "name": "Philip St. George Cooke",
       "birth_year": 1809,
       "death_year": 1895,
-      "birth_date": null,
+      "birth_date": "1809-06-13",
       "death_date": null,
       "short_description": "Served as a Civil War general.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "A Virginia-born West Point graduate, he spent nearly fifty years as a U.S. cavalry officer and is remembered as one of the founding figures of the American mounted service. During the Mexican-American War he led the Mormon Battalion on a march that carved out what became known as Cooke's Wagon Road, later a key route for California-bound migrants, and he later wrote an influential, if controversial, cavalry tactics manual. Though born in the South, he stayed loyal to the Union during the Civil War even as his own son joined the Confederate army and his son-in-law became the famous Confederate cavalry commander J.E.B. Stuart. He died in 1895.",
+      "why_interesting": "A Virginia-born cavalry officer who stayed loyal to the Union even as his own son-in-law became a famous Confederate general.",
       "dead_score": 68,
       "categories": [
         "military"
@@ -465,7 +481,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Philip_St._George_Cooke&oldid=1358355706"
     },
     {
       "id": "d7c76126-175f-57ae-b496-99c1a87203ea",
@@ -473,11 +490,11 @@
       "name": "William Webb Ferguson",
       "birth_year": 1857,
       "death_year": 1910,
-      "birth_date": null,
+      "birth_date": "1857-05-22",
       "death_date": null,
       "short_description": "Broke a racial barrier in Michigan’s legislature.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "The first Black graduate of a Detroit public high school, he built a successful printing business before winning a landmark 1890 discrimination lawsuit after being denied restaurant service — a case decided in his favor by the Michigan Supreme Court. Three years later he became the first African American elected to the Michigan House of Representatives, representing a Wayne County district as a Republican from 1893 to 1896. He died in Detroit in 1910.",
+      "why_interesting": "Won a Michigan Supreme Court discrimination case, then became the first Black legislator elected to the state House.",
       "dead_score": 80,
       "categories": [
         "politics",
@@ -488,7 +505,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=William_Webb_Ferguson&oldid=1365805304"
     },
     {
       "id": "4eba5497-b74f-562a-95ab-f6b23c02c451",
@@ -496,11 +514,11 @@
       "name": "Harry P. Guy",
       "birth_year": 1870,
       "death_year": 1950,
-      "birth_date": null,
+      "birth_date": "1870-07-17",
       "death_date": null,
       "short_description": "Composed ragtime music.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "An Ohio-born composer who studied under Victor Herbert before settling in Detroit in 1895, he wrote popular music for local publishers and produced orchestral arrangements for both the University of Michigan and University of Detroit. His 1898 composition “Chicken Chowder” became a ragtime standard still performed today, but commercial success never followed him personally, and he spent his later years largely forgotten and living in poverty. He died in 1950; his grave went unmarked until a historical marker was placed there in 2003.",
+      "why_interesting": "Wrote a ragtime standard still played today, then died in obscurity and poverty.",
       "dead_score": 70,
       "categories": [
         "music"
@@ -510,7 +528,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Harry_P._Guy&oldid=1352533211"
     },
     {
       "id": "e4a3cdf8-b674-5990-8f15-bc94c28a2502",
@@ -518,11 +537,11 @@
       "name": "Douglass Houghton",
       "birth_year": 1809,
       "death_year": 1845,
-      "birth_date": null,
+      "birth_date": "1809-09-21",
       "death_date": null,
       "short_description": "Geologist and Detroit mayor.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "A New York-born scientist appointed Michigan's first state geologist in 1839, the same year he became the University of Michigan's first professor of geology, mineralogy, and chemistry. His 1841 survey of the Upper Peninsula's copper deposits touched off the first major mining boom in American history, and years earlier he had personally administered more than 2,000 smallpox vaccinations to Chippewa communities during expeditions in the early 1830s. He also served a term as Detroit's mayor in 1842, and drowned in a boating accident on Lake Superior in 1845 while surveying the region he'd helped open to development.",
+      "why_interesting": "His copper survey triggered a mining boom, and he drowned surveying the very shoreline he'd helped make valuable.",
       "dead_score": 75,
       "categories": [
         "history",
@@ -533,7 +552,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Douglass_Houghton&oldid=1355861080"
     },
     {
       "id": "8f843cd2-a0db-5874-b795-6ac47559f0a4",
@@ -541,11 +561,11 @@
       "name": "Sam Thompson",
       "birth_year": 1860,
       "death_year": 1922,
-      "birth_date": null,
+      "birth_date": "1860-03-05",
       "death_date": null,
       "short_description": "Baseball Hall of Fame outfielder.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "An Indiana-born outfielder, he won the National League batting title in 1887 with a .372 average and set a major-league record with 166 RBIs in just 127 games — a mark that still stands relative to games played. Two years later he became the first player to combine 20 home runs and 20 stolen bases in a single season, over a career split mostly between the Detroit Wolverines and Philadelphia Phillies with a brief return to the Tigers in 1906. He finished with a career .331 batting average and 1,988 hits, and was inducted into the Baseball Hall of Fame by the Veterans Committee in 1974, more than fifty years after his death in 1922.",
+      "why_interesting": "Set a still-standing RBI-to-games record in 1887 — over half a century before the Hall of Fame got around to inducting him.",
       "dead_score": 85,
       "categories": [
         "sports"
@@ -555,7 +575,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Sam_Thompson_(outfielder)&oldid=1357497200"
     },
     {
       "id": "ec9e5e65-0032-5470-aafa-a6f2e5d5296d",
@@ -563,11 +584,11 @@
       "name": "Martha Jean Steinberg",
       "birth_year": 1930,
       "death_year": 2000,
-      "birth_date": null,
+      "birth_date": "1930-09-09",
       "death_date": null,
       "short_description": "Worked in radio.",
-      "biography": null,
-      "why_interesting": null,
+      "biography": "Born in Memphis, she broke into radio in 1954 after winning a contest at WDIA, becoming one of the first Black female disc jockeys in the country and earning the nickname “the Queen.” After moving to Detroit in 1963, she built a following at WJLB, and during the unrest of July 1967 persuaded the station to drop its regular programming — an intervention some credit with helping calm the city. She was later ordained as a minister, closing her broadcasts with “God loves you and I love you,” and in 1982 bought her own station, WQBH, which she ran until her death in 2000.",
+      "why_interesting": "Talked a Detroit radio station into changing its programming during the 1967 unrest — then bought her own station years later.",
       "dead_score": 75,
       "categories": [
         "entertainment",
@@ -578,7 +599,8 @@
       "location_precision": "cemetery",
       "location_confidence": 0.75,
       "source_url": "https://en.wikipedia.org/w/index.php?title=Elmwood_Cemetery_(Detroit)&oldid=1372400484",
-      "is_featured": false
+      "is_featured": false,
+      "profile_source_url": "https://en.wikipedia.org/w/index.php?title=Martha_Jean_Steinberg&oldid=1371610091"
     }
   ]
 }

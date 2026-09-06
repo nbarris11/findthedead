@@ -104,11 +104,12 @@ export function demoPersonProfile(input: Seed, slug: string): ProfilePerson | nu
       website_url: null,
     },
     images: [],
-    // Mirrors build-seed.ts: both rows really do cite the same URL — one
-    // for the person facts, one for the burial/cemetery listing.
+    // Mirrors build-seed.ts: the first and third rows cite the same cemetery
+    // listing URL (person facts, then burial), while the profile row — when
+    // present — cites the person's own article instead.
     sources: [
       {
-        source_type: "wikipedia",
+        source_type: "wikipedia" as const,
         url: p.source_url,
         field: "name,birth_year,death_year,short_description",
         retrieved_at: seed.retrieved_at,
@@ -116,8 +117,20 @@ export function demoPersonProfile(input: Seed, slug: string): ProfilePerson | nu
         notes:
           "Short original factual label; dates are years only. Publication review pending.",
       },
+      ...(p.profile_source_url !== null
+        ? [
+            {
+              source_type: "wikipedia" as const,
+              url: p.profile_source_url,
+              field: "birth_date,biography,why_interesting",
+              retrieved_at: seed.retrieved_at,
+              confidence: 0.8,
+              notes: "Person's own article; biography paraphrased, not copied.",
+            },
+          ]
+        : []),
       {
-        source_type: "wikipedia",
+        source_type: "wikipedia" as const,
         url: p.source_url,
         field: "cemetery_id",
         retrieved_at: seed.retrieved_at,

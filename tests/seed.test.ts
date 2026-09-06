@@ -13,9 +13,10 @@ const seed = seedSchema.parse(input);
 test("22 traceable records preserve cemetery precision and unknown day/month", () => {
   assert.equal(seed.people.length, 22);
   for (const p of seed.people) {
-    assert.equal(p.birth_date, null);
     assert.equal(p.location_precision, "cemetery");
     assert.ok(p.source_url.startsWith("https://"));
+    if (p.birth_date !== null)
+      assert.ok(p.birth_date.startsWith(String(p.birth_year)));
   }
   assert.equal(demoPeople(seed)[0].latitude, seed.cemeteries[0].latitude);
 });

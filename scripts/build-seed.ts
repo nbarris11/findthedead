@@ -69,6 +69,7 @@ export function buildSeed(input: Seed): string {
       location_precision,
       location_confidence,
       source_url,
+      profile_source_url,
       ...person
     } = p;
     insert("people", { ...person, status: "draft", is_fixture: true });
@@ -92,6 +93,18 @@ export function buildSeed(input: Seed): string {
         "Short original factual label; dates are years only. Publication review pending.",
       person_id: p.id,
     });
+    if (profile_source_url !== null)
+      insert("sources", {
+        id: sourceId(`${p.id}:profile`),
+        source_type: "wikipedia",
+        url: profile_source_url,
+        external_id: null,
+        retrieved_at: seed.retrieved_at,
+        field: "birth_date,biography,why_interesting",
+        confidence: 0.8,
+        notes: "Person's own article; biography paraphrased, not copied.",
+        person_id: p.id,
+      });
     insert("sources", {
       id: sourceId(burial_id),
       source_type: "wikipedia",

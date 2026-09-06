@@ -10,7 +10,7 @@ begin
   if (select slug from public.nearby_people(42.4419,-83.1261,1,90,'music',1)) <> 'aretha-franklin' then raise exception 'Ranking failed'; end if;
   if (select count(*) from public.people_in_bounds(-84,42,-82,43)) <> 22 then raise exception 'Bounds lookup failed'; end if;
   if (select count(*) from public.cemeteries_in_bounds(-84,42,-82,43)) <> 2 then raise exception 'Cemetery bounds failed'; end if;
-  if (select count(*) from public.sources) <> 46 then raise exception 'Published provenance inaccessible'; end if;
+  if (select count(*) from public.sources) <> 68 then raise exception 'Published provenance inaccessible'; end if;
   if (select count(*) from public.cemetery_by_slug('woodlawn-detroit')) <> 1 then raise exception 'Cemetery by slug failed'; end if;
   if (select round(latitude::numeric,4) from public.cemetery_by_slug('woodlawn-detroit')) <> 42.4419 then raise exception 'Cemetery by slug coordinates wrong'; end if;
   if (select count(*) from public.cemetery_by_slug('no-such-cemetery')) <> 0 then raise exception 'Cemetery by slug should be empty for unknown slug'; end if;

@@ -38,7 +38,7 @@ test("migrations, seeds, spatial queries and RLS execute on PostgreSQL/PostGIS",
         }>(
           "select (select count(*)::int from people) people,(select count(*)::int from burials) burials,(select count(*)::int from sources) sources",
         );
-        assert.deepEqual(rows[0], { people: 22, burials: 22, sources: 46 });
+        assert.deepEqual(rows[0], { people: 22, burials: 22, sources: 68 });
       },
     );
     await t.test(

@@ -38,11 +38,15 @@ export const seedSchema = z
             name: z.string().min(1),
             birth_year: z.number().int(),
             death_year: z.number().int(),
-            birth_date: z.null(),
+            // A real calendar date, when a reliable source gives one; year-only
+            // knowledge (most of the original seed) stays null rather than
+            // guessing a month/day. Checked against birth_year below, mirroring
+            // the database's own check constraint.
+            birth_date: z.iso.date().nullable(),
             death_date: z.null(),
             short_description: z.string().min(1).max(500),
-            biography: z.null(),
-            why_interesting: z.null(),
+            biography: z.string().min(50).max(2000).nullable(),
+            why_interesting: z.string().min(1).max(300).nullable(),
             dead_score: z.number().int().min(0).max(100),
             categories: z.array(slug).min(1),
             cemetery_id: z.uuid(),
@@ -50,9 +54,26 @@ export const seedSchema = z
             location_precision: z.literal("cemetery"),
             location_confidence: z.number().min(0).max(1),
             source_url: source,
+            // The person's own Wikipedia article, sourcing birth_date/
+            // biography/why_interesting — distinct from source_url, which
+            // sources burial membership via the cemetery's own article and
+            // may not even mention this person's birthdate.
+            profile_source_url: source.nullable(),
             is_featured: z.boolean(),
           })
-          .refine((p) => p.birth_year <= p.death_year, "Death precedes birth"),
+          .refine((p) => p.birth_year <= p.death_year, "Death precedes birth")
+          .refine(
+            (p) => p.birth_date === null || p.birth_date.startsWith(String(p.birth_year)),
+            "birth_date year must match birth_year",
+          )
+          .refine(
+            (p) => p.biography === null || p.profile_source_url !== null,
+            "biography requires a profile_source_url",
+          )
+          .refine(
+            (p) => p.birth_date === null || p.profile_source_url !== null,
+            "birth_date requires a profile_source_url",
+          ),
       )
       .min(20)
       .max(50),

@@ -20,11 +20,16 @@ test("demoPersonProfile: known slug resolves full profile with cemetery and sour
   assert.equal(profile.cemetery?.slug, "woodlawn-detroit");
   assert.equal(profile.cemetery?.name, "Woodlawn Cemetery");
   assert.equal(profile.images.length, 0);
-  assert.equal(profile.sources.length, 2);
-  assert.ok(profile.sources.every((s) => s.url === profile.sources[0].url));
+  // Aretha Franklin has a real profile_source_url (her own article), so this
+  // is the 3-source case: cemetery-listing facts, her own article, burial.
+  assert.equal(profile.sources.length, 3);
   assert.deepEqual(
     new Set(profile.sources.map((s) => s.field)),
-    new Set(["name,birth_year,death_year,short_description", "cemetery_id"]),
+    new Set([
+      "name,birth_year,death_year,short_description",
+      "birth_date,biography,why_interesting",
+      "cemetery_id",
+    ]),
   );
 });
 
