@@ -92,7 +92,7 @@ test("data mode is explicit; misconfiguration never silently serves demo", () =>
   assert.throws(() => dataConfig({ DATA_MODE: "supabase" }));
   assert.throws(() => dataConfig({ DATA_MODE: "typo" }));
   assert.throws(() =>
-    dataConfig({ DATA_MODE: "demo", VERCEL_ENV: "production" }),
+    dataConfig({ DATA_MODE: "demo", NODE_ENV: "production" }),
   );
   assert.equal(
     dataConfig({

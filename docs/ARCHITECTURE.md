@@ -2,7 +2,7 @@
 
 ## Stack and boundaries
 
-Next.js App Router, strict TypeScript, React, Tailwind, Zod, Supabase PostgreSQL and PostGIS. Target Vercel's Node runtime. Mapbox GL JS renders `/explore`'s map. Versions are pinned with package-lock.json. Node 22+ is the supported baseline; no remote font fetch is required during builds.
+Next.js App Router, strict TypeScript, React, Tailwind, Zod, Supabase PostgreSQL and PostGIS. Targets a standard Node SSR runtime — deployed on Netlify (see Deployment, below), not Vercel; nothing here is Vercel-specific. Mapbox GL JS renders `/explore`'s map. Versions are pinned with package-lock.json. Node 22+ is the supported baseline; no remote font fetch is required during builds.
 
 Server Components own page rendering and metadata. `/explore` is a Server Component that fetches the first paint of visible people and categories, then hands off to `ExploreClient`, the one meaningful client boundary: it owns map state, filters, geolocation, and the bottom sheet. `src/lib/data` is the server-only repository boundary; ordinary requests use Supabase, never Wikidata. A separate, explicit development mode reads committed seed fixtures with no credentials. Supabase failures must not silently fall back to demo content. Never use service-role keys for public reads.
 
@@ -54,7 +54,9 @@ Core reads are public. Saved/visited/collections later use Supabase Auth and own
 
 ## Deployment
 
-Import the repository into Vercel after local verification; configure public origin and Supabase read credentials there. Apply migrations through the deployment process before enabling database-backed reads. Do not run development seeds against production. This task does not create remote resources or deploy.
+Deployed to Netlify (`findthedead.netlify.app`), not Vercel — nothing in this codebase is Vercel-specific (no `@vercel/*` packages, no platform-only APIs), and Netlify's official Next.js Runtime handles the App Router, Server Components, and route handlers the same way. `netlify.toml` declares the build command and `@netlify/plugin-nextjs` explicitly rather than relying on auto-detection. Environment variables (`NEXT_PUBLIC_SITE_URL`, `DATA_MODE=supabase`, the Supabase URL/publishable key, the Mapbox token) are set in Netlify's project configuration, imported from a `.env`-shaped paste rather than added one at a time. `SUPABASE_SERVICE_ROLE_KEY` is deliberately not set there — the deployed app never needs it; only the offline ingestion scripts do.
+
+Verified live, not just built: `/`, `/explore` (map tiles and clustering render correctly through Netlify's serverless function), `/search`, `/nearby`, and a genuine `/people/[slug]` 404 all checked directly against `findthedead.netlify.app` in an unauthenticated browser session, with a clean console. Do not run development seeds against production; migrations and seed data were applied to the live Supabase project separately, over a direct connection string, not through this app deployment (see docs/ROADMAP.md for how).
 
 ## Toolchain compatibility decision
 
@@ -64,4 +66,4 @@ On 2026-09-05 npm reports Next.js 16.3.4 and React 19.2.8 as stable. TypeScript 
 
 Docker is not installed in the initial workspace. Two test-only packages, PGlite and its PostGIS extension, make real SQL and spatial checks repeatable without external infrastructure. The deployment still uses Supabase; there is no embedded production database. Role bootstrap in the harness approximates Supabase's anonymous/authenticated/service roles. Run the standalone SQL smoke file on local Supabase before deployment to cover platform differences.
 
-The homepage is a Server Component that reads featured records through the server-only repository. It is dynamically rendered so missing deployment credentials do not break the build and configuration/data changes do not require rebuilding. Errors reach a user-friendly retry boundary; empty published datasets show an honest empty state. Only explicit demo mode returns source-backed development fixtures, with a visible label. Demo mode is rejected on Vercel production.
+The homepage is a Server Component that reads featured records through the server-only repository. It is dynamically rendered so missing deployment credentials do not break the build and configuration/data changes do not require rebuilding. Errors reach a user-friendly retry boundary; empty published datasets show an honest empty state. Only explicit demo mode returns source-backed development fixtures, with a visible label. Demo mode is rejected whenever `NODE_ENV=production` — checked directly, not via a platform-specific variable like Vercel's `VERCEL_ENV`, which would have silently stopped guarding anything the moment this app deployed to Netlify instead.

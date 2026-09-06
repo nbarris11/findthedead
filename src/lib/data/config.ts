@@ -6,7 +6,10 @@ export function dataConfig(env: Record<string, string | undefined>) {
       env.DATA_MODE ?? (env.NODE_ENV === "production" ? "supabase" : "demo"),
     );
   if (mode === "demo") {
-    if (env.VERCEL_ENV === "production")
+    // NODE_ENV=production is set by `next build`/`next start` on any host —
+    // Vercel, Netlify, or otherwise — unlike a platform-specific env var,
+    // which would silently stop guarding the moment the app moved hosts.
+    if (env.NODE_ENV === "production")
       throw new Error("Demo data is disabled on production deployments");
     return { mode } as const;
   }

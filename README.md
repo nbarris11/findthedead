@@ -40,13 +40,19 @@ For a production-mode local server, run `npm run start` after building. Build do
 | `SUPABASE_SERVICE_ROLE_KEY` | Trusted offline ingestion only (`npm run publish:reviewed`); never a public variable or normal app read credential |
 | `NEXT_PUBLIC_MAPBOX_TOKEN` | Public token from account.mapbox.com for `/explore`'s map; without it the route falls back to an accessible list |
 
-Keep actual keys in ignored `.env.local` or Vercel settings. Never commit secrets. A configured database failure must not be hidden by switching to demo data.
+Keep actual keys in ignored `.env.local` locally, or your host's environment variable settings in production (Netlify, in this project's case). Never commit secrets. A configured database failure must not be hidden by switching to demo data.
 
 ## Product and architecture
 
 Read [Product](docs/PRODUCT.md), [Architecture](docs/ARCHITECTURE.md), [Database](docs/DATABASE.md), [Data sources](docs/DATA-SOURCES.md), [Design](docs/DESIGN.md), and [Roadmap](docs/ROADMAP.md).
 
-Deployment target: Vercel with Supabase PostgreSQL/PostGIS. No remote project or deployment is created by this repository.
+## Deployment
+
+Live at [findthedead.netlify.app](https://findthedead.netlify.app) on Netlify, connected to `github.com/nbarris11/findthedead` for continuous deployment — every push to `main` redeploys automatically. `netlify.toml` declares the build command and the official `@netlify/plugin-nextjs` explicitly rather than relying on auto-detection. Nothing here is Vercel-specific, so any standard Next.js host works the same way.
+
+Environment variables (`NEXT_PUBLIC_SITE_URL`, `DATA_MODE=supabase`, the Supabase URL/publishable key, the Mapbox token) are set directly in Netlify's project configuration, not committed. `SUPABASE_SERVICE_ROLE_KEY` is intentionally not set there — the deployed app never needs it; only the offline ingestion scripts (below) do.
+
+The deployed site currently shows the honest empty state ("The first stories are being prepared") — real infrastructure, real database, no published content yet. That's a deliberate, separate editorial decision (see docs/ROADMAP.md).
 
 ## Local Supabase database
 
