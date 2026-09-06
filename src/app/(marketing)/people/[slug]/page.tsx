@@ -26,8 +26,7 @@ export async function generateMetadata({
     title: person.name,
     description: person.short_description,
     alternates: { canonical: `/people/${person.slug}` },
-    // Preview foundation; enable once this profile has had editorial review.
-    robots: { index: false, follow: false },
+    robots: { index: true, follow: true },
     openGraph: {
       title: person.name,
       description: person.short_description,

@@ -35,25 +35,25 @@ export default async function Home() {
             </Link>
           </div>
           <p className="preview-note">
-            Detroit & Southeast Michigan · Early preview
+            Michigan · New stories added as they’re reviewed
           </p>
         </div>
-        <aside className="editorial-panel" aria-label="Our starting point">
+        <aside className="editorial-panel" aria-label="Our statewide focus">
           <div className="panel-top">
             <span>FIELD NOTES / 001</span>
             <span aria-hidden="true">↗</span>
           </div>
           <div className="panel-title">
-            <span className="eyebrow">STARTING IN</span>
-            <h2>Detroit.</h2>
+            <span className="eyebrow">EXPLORING</span>
+            <h2>Michigan.</h2>
             <p>
-              A city that changed the world.
+              A state that changed the world.
               <br />
               People worth finding.
             </p>
           </div>
           <div className="panel-bottom">
-            <span>MUSIC / MOTOR CITY / HISTORY</span>
+            <span>MUSIC / INDUSTRY / HISTORY</span>
             <span>MI, USA</span>
           </div>
         </aside>
@@ -110,12 +110,12 @@ export default async function Home() {
         <h2>A little closer to history.</h2>
         <p>
           FindTheDead is a new way to discover remarkable lives through the
-          places where people rest. We’re starting in Southeast Michigan, with
-          room to explore everywhere.
+          places where people rest. We’re building across Michigan, one
+          carefully sourced story at a time.
         </p>
         <p className="muted">
-          This is the foundation preview. The interactive map is live;
-          location-based nearby discovery is coming next.
+          Explore the statewide map, search by name, or use your location to
+          find remarkable people buried nearby.
         </p>
       </section>
     </main>

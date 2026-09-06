@@ -1,18 +1,17 @@
-/** Explore map defaults. Detroit is the first edition, not a hardcoded limit:
- *  every query is bounds-driven, so any region works once it has records. */
+/** Statewide Michigan view. Every query remains bounds-driven, so visitors can
+ *  move beyond the initial view and future records work without UI changes. */
 export const DEFAULT_VIEW = {
-  latitude: 42.3897,
-  longitude: -83.0724,
-  zoom: 9.4,
+  latitude: 44.6,
+  longitude: -85.4,
+  zoom: 5.4,
 } as const;
 
-/** Server-rendered first paint uses these bounds so the map has records
- *  before Mapbox loads, and before the visitor is asked for location. */
+/** Lower and Upper Peninsulas, with a small margin for edge cemeteries. */
 export const DEFAULT_BOUNDS = {
-  west: -83.55,
-  south: 42.15,
-  east: -82.75,
-  north: 42.62,
+  west: -90.6,
+  south: 41.65,
+  east: -82.05,
+  north: 48.35,
 } as const;
 
 /** Dead Score threshold used by the "Notable only" filter. Configurable here

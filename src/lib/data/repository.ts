@@ -23,6 +23,11 @@ import type {
   CemeteryProfile,
 } from "../../types/database";
 
+export type PublicSiteRecord = {
+  slug: string;
+  updated_at?: string;
+};
+
 const seed = seedSchema.parse(seedInput);
 function client() {
   const config = dataConfig(process.env);
@@ -84,6 +89,37 @@ export const featuredPeople = cache(async () => {
     throw new Error("Featured records could not be loaded", { cause: error });
   return { isDemo: false, people: data ?? [] };
 });
+
+/** Public profile URLs for sitemap generation. In database mode, anon RLS is
+ *  the publication gate, so drafts and fixtures cannot enter the sitemap. */
+export async function publicSiteRecords(): Promise<{
+  people: PublicSiteRecord[];
+  cemeteries: PublicSiteRecord[];
+}> {
+  if (dataConfig(process.env).mode === "demo") {
+    return {
+      people: seed.people.map(({ slug }) => ({ slug })),
+      cemeteries: seed.cemeteries.map(({ slug }) => ({ slug })),
+    };
+  }
+  const db = client();
+  const [peopleResult, cemeteriesResult] = await Promise.all([
+    db.from("people").select("slug,updated_at").order("slug"),
+    db.from("cemeteries").select("slug,updated_at").order("slug"),
+  ]);
+  if (peopleResult.error)
+    throw new Error("Public person URLs could not be loaded", {
+      cause: peopleResult.error,
+    });
+  if (cemeteriesResult.error)
+    throw new Error("Public cemetery URLs could not be loaded", {
+      cause: cemeteriesResult.error,
+    });
+  return {
+    people: peopleResult.data ?? [],
+    cemeteries: cemeteriesResult.data ?? [],
+  };
+}
 
 /** Categories drive the explore filters, so the UI never hardcodes them.
  *  Request-level deduplication only; the list carries no visitor data. */

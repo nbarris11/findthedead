@@ -15,7 +15,12 @@ export const metadata: Metadata = {
     siteName: site.name,
     type: "website",
   },
-  robots: { index: false, follow: false }, // Foundation preview; enable only after editorial launch review.
+  twitter: {
+    card: "summary_large_image",
+    title: "Find the dead.",
+    description: site.description,
+  },
+  robots: { index: true, follow: true },
 };
 export const viewport: Viewport = {
   themeColor: "#101918",

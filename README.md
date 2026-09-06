@@ -1,6 +1,6 @@
 # FindTheDead
 
-Find interesting dead people around you. A location-first history discovery product, beginning in Detroit and Southeast Michigan.
+Find interesting dead people around you. A location-first history discovery product growing across Michigan.
 
 All seven planned milestones are implemented: foundation, database, `/explore` (the interactive map), `/nearby`, person and cemetery profiles, `/search`, and a bounded Wikidata ingestion pipeline. No login, Supabase project, or remote database is needed for the local preview; a Mapbox token is only needed to see the actual map tiles (see Environment, below) — without one, `/explore` degrades to an accessible list instead of breaking.
 
@@ -15,7 +15,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000. `DATA_MODE=demo` explicitly selects offline development data — the seeded 22 people and two Detroit cemeteries. The preview is noindex.
+Open http://localhost:3000. `DATA_MODE=demo` explicitly selects offline development data — the seeded 22 people and two Detroit cemeteries. Production indexes only published profile pages; search, nearby, and map utility routes remain out of the sitemap.
 
 ## Check the application
 
@@ -52,7 +52,7 @@ Live at [findthedead.netlify.app](https://findthedead.netlify.app) on Netlify, c
 
 Environment variables (`NEXT_PUBLIC_SITE_URL`, `DATA_MODE=supabase`, the Supabase URL/publishable key, the Mapbox token) are set directly in Netlify's project configuration, not committed. `SUPABASE_SERVICE_ROLE_KEY` is intentionally not set there — the deployed app never needs it; only the offline ingestion scripts (below) do.
 
-All 24 reviewed people (the dev seed plus two Wikidata-sourced additions) and all 3 cemeteries are published on the live project as of 2026-09-05, on the product owner's explicit direction — see docs/ROADMAP.md for what was verified afterward. Publishing more, or anything new from the ingestion pipeline, remains the same explicit, human-run step described below; nothing here does it automatically.
+All 46 reviewed people and all 18 related cemeteries are published on the live project as of 2026-09-06, on the product owner's explicit direction — see docs/ROADMAP.md for what was verified afterward. Publishing more, or anything new from the ingestion pipeline, remains the same explicit, human-run step described below; nothing here does it automatically.
 
 ## Local Supabase database
 

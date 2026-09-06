@@ -22,7 +22,7 @@ export async function generateMetadata({
     title: cemetery.name,
     description: `${cemetery.name}${location ? `, ${location}` : ""} — ${pluralizePeople(cemetery.people.length)} to discover.`,
     alternates: { canonical: `/cemeteries/${cemetery.slug}` },
-    robots: { index: false, follow: false },
+    robots: { index: true, follow: true },
   };
 }
 
