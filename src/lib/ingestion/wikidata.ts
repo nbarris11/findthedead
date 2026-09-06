@@ -5,7 +5,7 @@ const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
  *  rate-limited or blocked outright. Update the contact detail before this
  *  ever runs against production volume. */
 export const WIKIDATA_USER_AGENT =
-  "FindTheDead-DevIngestion/0.1 (local development proof of concept; no public deployment yet)";
+  "FindTheDead/0.2 (https://findthedead.netlify.app; editorial ingestion)";
 
 const MAX_RETRIES = 3;
 const BASE_BACKOFF_MS = 1000;

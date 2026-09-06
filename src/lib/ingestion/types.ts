@@ -42,5 +42,8 @@ export type IngestionRun = {
   candidate_count: number;
   new_count: number;
   possible_duplicate_count: number;
+  excluded_outside_scope_count?: number;
+  completed_targets?: number;
+  target_count?: number;
   candidates: DedupedCandidate[];
 };

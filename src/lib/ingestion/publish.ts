@@ -14,6 +14,15 @@ function wikidataEntityUrl(qid: string): string {
   return `https://www.wikidata.org/wiki/${qid}`;
 }
 
+export function cemeterySlugForInsert(
+  name: string,
+  wikidataId: string,
+  baseSlugTaken: boolean,
+): string {
+  const base = slugify(name);
+  return baseSlugTaken ? `${base}-${wikidataId.toLowerCase()}` : base;
+}
+
 /** Upserts one reviewed candidate as a draft, never a published record —
  *  publication stays a separate, later, human editorial action (see
  *  docs/DATABASE.md). Every insert here is idempotent on slug: running this
@@ -25,18 +34,33 @@ export async function publishReviewedCandidate(
   db: SupabaseClient<Database>,
   candidate: ReviewedCandidate,
 ): Promise<PublishResult> {
-  const cemeterySlug = slugify(candidate.burial_place_name);
-
-  const { data: existingCemetery, error: findCemeteryError } = await db
-    .from("cemeteries")
-    .select("id")
-    .eq("slug", cemeterySlug)
+  const { data: cemeterySource, error: findSourceError } = await db
+    .from("sources")
+    .select("cemetery_id")
+    .eq("external_id", candidate.burial_place_wikidata_id)
+    .not("cemetery_id", "is", null)
+    .limit(1)
     .maybeSingle();
-  if (findCemeteryError)
-    throw new Error("Could not look up cemetery", { cause: findCemeteryError });
+  if (findSourceError)
+    throw new Error("Could not look up cemetery source", {
+      cause: findSourceError,
+    });
 
-  let cemeteryId = existingCemetery?.id;
+  let cemeteryId = cemeterySource?.cemetery_id ?? undefined;
   if (!cemeteryId) {
+    const baseSlug = slugify(candidate.burial_place_name);
+    const { data: slugMatch, error: findSlugError } = await db
+      .from("cemeteries")
+      .select("id")
+      .eq("slug", baseSlug)
+      .maybeSingle();
+    if (findSlugError)
+      throw new Error("Could not check cemetery slug", { cause: findSlugError });
+    const cemeterySlug = cemeterySlugForInsert(
+      candidate.burial_place_name,
+      candidate.burial_place_wikidata_id,
+      !!slugMatch,
+    );
     const { data: insertedCemetery, error: insertCemeteryError } = await db
       .from("cemeteries")
       .insert({

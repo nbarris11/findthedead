@@ -4,6 +4,8 @@ import { normalizeSparqlResults } from "../src/lib/ingestion/normalize.ts";
 import { dedupeCandidates, slugify } from "../src/lib/ingestion/dedupe.ts";
 import type { SparqlResponse } from "../src/lib/ingestion/wikidata.ts";
 import type { IngestionCandidate } from "../src/lib/ingestion/types.ts";
+import { MICHIGAN_INGESTION_TARGETS } from "../src/lib/ingestion/michigan.ts";
+import { isPointInMichigan } from "../src/lib/geo/michigan.ts";
 
 function binding(overrides: Record<string, string | undefined>) {
   const out: Record<string, { value: string; type: string }> = {};
@@ -43,6 +45,15 @@ test("normalizeSparqlResults: extracts QIDs, dates, coordinates, image, and arti
   assert.equal(candidate.burial_place_longitude, -83.1261);
   assert.equal(candidate.commons_file, "Example Person.jpg");
   assert.equal(candidate.wikipedia_url, "https://en.wikipedia.org/wiki/Example_Person");
+});
+
+test("Michigan boundary includes both peninsulas and excludes border cities", () => {
+  assert.equal(isPointInMichigan(42.3314, -83.0458), true); // Detroit
+  assert.equal(isPointInMichigan(46.5436, -87.3954), true); // Marquette
+  assert.equal(isPointInMichigan(41.6764, -86.252), false); // South Bend
+  assert.equal(isPointInMichigan(42.9745, -82.4066), false); // Sarnia
+  assert.equal(isPointInMichigan(44.5133, -88.0133), false); // Green Bay
+  assert.equal(isPointInMichigan(Number.NaN, -84), false);
 });
 
 test("normalizeSparqlResults: treats January 1st dates as imprecise (year-only)", () => {
@@ -144,4 +155,28 @@ test("dedupeCandidates: deduplicates the same wikidata_id within one batch", () 
     new Set(),
   );
   assert.equal(results.length, 1);
+});
+
+test("Michigan ingestion targets cover every major state region with valid unique hubs", () => {
+  assert.ok(MICHIGAN_INGESTION_TARGETS.length >= 12);
+  assert.deepEqual(
+    new Set(MICHIGAN_INGESTION_TARGETS.map((target) => target.region)),
+    new Set([
+      "Upper Peninsula",
+      "Northern Lower",
+      "West Michigan",
+      "Mid Michigan",
+      "East Michigan",
+    ]),
+  );
+  assert.equal(
+    new Set(MICHIGAN_INGESTION_TARGETS.map((target) => target.label)).size,
+    MICHIGAN_INGESTION_TARGETS.length,
+  );
+  assert.ok(
+    MICHIGAN_INGESTION_TARGETS.every(
+      ({ latitude, longitude }) =>
+        latitude >= 41.6 && latitude <= 48.4 && longitude >= -90.6 && longitude <= -82,
+    ),
+  );
 });

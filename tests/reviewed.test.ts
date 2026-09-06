@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { reviewedCandidateSchema } from "../src/lib/ingestion/reviewed.ts";
+import { cemeterySlugForInsert } from "../src/lib/ingestion/publish.ts";
 
 function reviewed(overrides: Record<string, unknown> = {}) {
   return {
@@ -57,5 +58,16 @@ test("reviewedCandidateSchema: rejects a malformed wikidata_id", () => {
   assert.equal(
     reviewedCandidateSchema.safeParse(reviewed({ wikidata_id: "not-a-qid" })).success,
     false,
+  );
+});
+
+test("cemetery slugs stay readable but do not merge same-name cemeteries", () => {
+  assert.equal(
+    cemeterySlugForInsert("Oakwood Cemetery", "Q123", false),
+    "oakwood-cemetery",
+  );
+  assert.equal(
+    cemeterySlugForInsert("Oakwood Cemetery", "Q456", true),
+    "oakwood-cemetery-q456",
   );
 });
