@@ -17,6 +17,9 @@
     "test:db": "node --experimental-strip-types --test tests/database.test.ts",
     "ingest:wikidata": "node --experimental-strip-types scripts/ingest-wikidata.ts",
     "ingest:michigan": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/ingest-michigan.ts",
+    "ingest:us": "node --experimental-strip-types scripts/ingest-us.ts",
+    "enrich:us": "node --experimental-strip-types scripts/enrich-us.ts",
+    "report:us": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/report-us.ts",
     "publish:reviewed": "node --experimental-strip-types scripts/publish-reviewed-candidates.ts",
     "release:reviewed": "node --experimental-strip-types scripts/release-reviewed-candidates.ts"
   },
