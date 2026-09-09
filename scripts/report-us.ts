@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import { dataConfig } from "../src/lib/data/config.ts";
@@ -39,9 +39,19 @@ async function main() {
     if(c.name===id) flags.push("missing_english_name");
     if(!c.wikipedia_url) flags.push("missing_english_article");
     if(claims.some(x=>!x.county)) flags.push("county_needs_review");
+    const evidencePath=resolve(root,"evidence",`${id}.json`);
+    if(existsSync(evidencePath)) {
+      const evidence=JSON.parse(readFileSync(evidencePath,"utf8"));
+      const statements: {burial_place_id:string|null;rank:string;reference_count:number}[]=evidence.burial_claims;
+      const matching=statements.filter(s=>s.rank!=="deprecated"&&claims.some(c=>c.burial_place_wikidata_id===s.burial_place_id));
+      if(!matching.length)flags.push("burial_statement_changed_or_missing");
+      else if(matching.some(s=>!s.reference_count))flags.push("burial_claim_without_attached_reference");
+    } else flags.push("burial_reference_check_pending");
     return {wikidata_id:id,name:c.name,slug:c.slug,states:[...new Set(claims.map(x=>x.state))],wikipedia_url:c.wikipedia_url,commons_file:c.commons_file,review_flags:flags,review_required:true,burial_claims:claims};
   });
-  const summary={generated_at:new Date().toISOString(),states_attempted:states.length,states_completed:states.filter(s=>s.complete).length,unique_people:queue.length,burial_claims:all.length,existing_public_profiles:queue.filter(p=>p.review_flags.includes("existing_public_profile")).length,with_english_article:queue.filter(p=>p.wikipedia_url).length,with_commons_filename:queue.filter(p=>p.commons_file).length,multiple_burial_claims:queue.filter(p=>p.review_flags.includes("multiple_burial_claims")).length,states};
+  const reviewFlagCounts:Record<string,number>={};
+  for(const p of queue)for(const flag of p.review_flags)reviewFlagCounts[flag]=(reviewFlagCounts[flag]??0)+1;
+  const summary={generated_at:new Date().toISOString(),states_attempted:states.length,states_completed:states.filter(s=>s.complete).length,unique_people:queue.length,burial_claims:all.length,existing_public_profiles:queue.filter(p=>p.review_flags.includes("existing_public_profile")).length,with_english_article:queue.filter(p=>p.wikipedia_url).length,with_commons_filename:queue.filter(p=>p.commons_file).length,multiple_burial_claims:queue.filter(p=>p.review_flags.includes("multiple_burial_claims")).length,review_flag_counts:reviewFlagCounts,states};
   writeFileSync(resolve(root,"review-queue.json"),JSON.stringify(queue,null,2));
   writeFileSync(resolve(root,"summary.json"),JSON.stringify(summary,null,2));
   const lines=["# U.S. candidate collection", "", `Collected ${queue.length.toLocaleString()} unique people across ${states.length} attempted states/DC; ${summary.states_completed} complete searches.`, "", `${summary.existing_public_profiles} match public profiles. ${summary.with_english_article} have English Wikipedia articles; ${summary.with_commons_filename} have Commons image references awaiting license review.`, "", "These are unpublished source claims, not verified profiles or a complete inventory of American burials. Coordinates describe burial places, not individual graves. County/state matches use simplified Census boundaries. Multiple burial claims and missing names are flagged in review-queue.json.", "", "| State | Burial candidates | Search complete |", "|---|---:|---|", ...states.map(s=>`| ${s.state} | ${s.burial_claims} | ${s.complete?"Yes":"Needs retry/review"} |`)];

@@ -10,6 +10,7 @@ From the project directory:
 npm run ingest:us
 npm run report:us
 npm run enrich:us -- --per-state 10
+npm run evidence:us
 ```
 
 `ingest:us` resumes saved checkpoints automatically. A finished state is skipped. To retry unfinished states only, run the same command again. To restrict a run, use `npm run ingest:us -- --states MI,OH,IN`. All three commands accept `--output <directory>`; use a new output directory for a fresh collection rather than deleting the existing research.
@@ -17,6 +18,8 @@ npm run enrich:us -- --per-state 10
 `report:us` uses the configured public Supabase key to page through existing profiles, then builds one review entry per Wikidata person. It never needs a service key. Run it again after adding states or publishing profiles so duplicate flags stay current.
 
 `enrich:us` defaults to ten source-rich candidates per state. It stores article revision links, research excerpts, and Commons image metadata in separate per-person files, resuming from its cache. `npm run enrich:us -- --per-state 0` requests enrichment of the entire collected library and may take substantially longer. Images and excerpts are research inputs, not approved editorial content. Failed enrichment records are retried by rerunning the command.
+
+`evidence:us` retrieves the underlying Wikidata burial statements for the research sample. It preserves attached references, statement rank, qualifiers, and birth/death date statements including their precision. Its report distinguishes claims with and without attached references. A reference may itself point to Find a Grave or another directory: reading Wikidata's citation does not independently verify the burial. This command does not scrape those directories.
 
 ## Outputs
 
