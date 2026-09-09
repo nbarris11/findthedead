@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { personProfile, nearbyPeople } from "@/lib/data/repository";
@@ -31,6 +32,9 @@ export async function generateMetadata({
       title: person.name,
       description: person.short_description,
       type: "profile",
+      ...(person.images[0] && {
+        images: [{ url: person.images[0].url, alt: person.images[0].alt_text }],
+      }),
     },
   };
 }
@@ -41,6 +45,7 @@ export default async function PersonPage({ params }: PageProps) {
   if (!person) notFound();
 
   const isExact = person.location_precision === "exact_grave";
+  const primaryImage = person.images[0];
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
   const nearby = (
     await nearbyPeople({
@@ -61,6 +66,7 @@ export default async function PersonPage({ params }: PageProps) {
     ...(person.birth_date && { birthDate: person.birth_date }),
     ...(person.death_date && { deathDate: person.death_date }),
     ...(person.wikipedia_url && { sameAs: [person.wikipedia_url] }),
+    ...(primaryImage && { image: primaryImage.url }),
     url: `${site.url}/people/${person.slug}`,
   };
 
@@ -71,15 +77,34 @@ export default async function PersonPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <article>
-        <header className="profile-hero">
-          {person.categories.length > 0 && (
-            <p className="eyebrow">{person.categories.join(" · ")}</p>
+        <header
+          className={`profile-hero${primaryImage ? " profile-hero-with-image" : ""}`}
+        >
+          <div>
+            {person.categories.length > 0 && (
+              <p className="eyebrow">{person.categories.join(" · ")}</p>
+            )}
+            <h1>{person.name}</h1>
+            <p className="lifespan">
+              {formatLifespan(person.birth_year, person.death_year)}
+            </p>
+            <p className="hero-description">{person.short_description}</p>
+          </div>
+          {primaryImage && (
+            <figure className="profile-portrait">
+              <div className="profile-portrait-frame">
+                <Image
+                  src={primaryImage.url}
+                  alt={primaryImage.alt_text}
+                  fill
+                  sizes="(max-width: 760px) 100vw, 240px"
+                  style={{ objectFit: "cover" }}
+                  priority
+                />
+              </div>
+              <figcaption>{primaryImage.attribution}</figcaption>
+            </figure>
           )}
-          <h1>{person.name}</h1>
-          <p className="lifespan">
-            {formatLifespan(person.birth_year, person.death_year)}
-          </p>
-          <p className="hero-description">{person.short_description}</p>
         </header>
 
         {(person.why_interesting || person.biography) && (

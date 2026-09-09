@@ -61,6 +61,36 @@ test("reviewedCandidateSchema: rejects a malformed wikidata_id", () => {
   );
 });
 
+test("reviewedCandidateSchema: accepts fully attributed Commons images", () => {
+  const result = reviewedCandidateSchema.safeParse(
+    reviewed({
+      image: {
+        url: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Portrait.jpg",
+        alt_text: "Historical portrait of David Dunbar Buick.",
+        creator: "Example photographer",
+        license: "Public domain",
+        attribution: "Example photographer · Public domain · Wikimedia Commons",
+        source_url: "https://commons.wikimedia.org/wiki/File:Portrait.jpg",
+        source_external_id: "Portrait.jpg",
+      },
+    }),
+  );
+  assert.equal(result.success, true);
+});
+
+test("reviewedCandidateSchema: rejects untrusted image hosts and missing attribution", () => {
+  const image = {
+    url: "https://example.com/portrait.jpg",
+    alt_text: "Historical portrait of David Dunbar Buick.",
+    creator: "Example photographer",
+    license: "Public domain",
+    attribution: "",
+    source_url: "https://commons.wikimedia.org/wiki/File:Portrait.jpg",
+    source_external_id: "Portrait.jpg",
+  };
+  assert.equal(reviewedCandidateSchema.safeParse(reviewed({ image })).success, false);
+});
+
 test("cemetery slugs stay readable but do not merge same-name cemeteries", () => {
   assert.equal(
     cemeterySlugForInsert("Oakwood Cemetery", "Q123", false),

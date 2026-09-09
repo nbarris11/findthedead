@@ -23,6 +23,68 @@ export function cemeterySlugForInsert(
   return baseSlugTaken ? `${base}-${wikidataId.toLowerCase()}` : base;
 }
 
+async function ensureReviewedImage(
+  db: SupabaseClient<Database>,
+  candidate: ReviewedCandidate,
+  personId: string,
+): Promise<void> {
+  if (!candidate.image) return;
+  const { data: existingImage, error: findImageError } = await db
+    .from("images")
+    .select("id")
+    .eq("person_id", personId)
+    .eq("url", candidate.image.url)
+    .limit(1)
+    .maybeSingle();
+  if (findImageError)
+    throw new Error("Could not look up reviewed image", { cause: findImageError });
+
+  let imageId = existingImage?.id;
+  if (!imageId) {
+    const { data: insertedImage, error: insertImageError } = await db
+      .from("images")
+      .insert({
+        person_id: personId,
+        url: candidate.image.url,
+        alt_text: candidate.image.alt_text,
+        creator: candidate.image.creator,
+        license: candidate.image.license,
+        attribution: candidate.image.attribution,
+        is_primary: true,
+      })
+      .select("id")
+      .single();
+    if (insertImageError)
+      throw new Error("Could not insert reviewed image", { cause: insertImageError });
+    imageId = insertedImage.id;
+  }
+
+  const { data: existingSource, error: findSourceError } = await db
+    .from("sources")
+    .select("id")
+    .eq("image_id", imageId)
+    .eq("url", candidate.image.source_url)
+    .limit(1)
+    .maybeSingle();
+  if (findSourceError)
+    throw new Error("Could not look up image source", { cause: findSourceError });
+  if (existingSource) return;
+
+  const { error: insertSourceError } = await db.from("sources").insert({
+    source_type: "commons",
+    url: candidate.image.source_url,
+    external_id: candidate.image.source_external_id,
+    retrieved_at: new Date().toISOString(),
+    field: "image,license,attribution",
+    confidence: 1,
+    notes: "License and attribution reviewed from the file's Commons metadata.",
+    person_id: personId,
+    image_id: imageId,
+  });
+  if (insertSourceError)
+    throw new Error("Could not insert image source", { cause: insertSourceError });
+}
+
 /** Upserts one reviewed candidate as a draft, never a published record —
  *  publication stays a separate, later, human editorial action (see
  *  docs/DATABASE.md). Every insert here is idempotent on slug: running this
@@ -101,8 +163,10 @@ export async function publishReviewedCandidate(
     .maybeSingle();
   if (findPersonError)
     throw new Error("Could not look up person", { cause: findPersonError });
-  if (existingPerson)
+  if (existingPerson) {
+    await ensureReviewedImage(db, candidate, existingPerson.id);
     return { candidate, personId: existingPerson.id, cemeteryId, outcome: "already_exists" };
+  }
 
   const { data: person, error: insertPersonError } = await db
     .from("people")
@@ -204,6 +268,8 @@ export async function publishReviewedCandidate(
     throw new Error("Could not insert person categories", {
       cause: insertCategoriesError,
     });
+
+  await ensureReviewedImage(db, candidate, person.id);
 
   return { candidate, personId: person.id, cemeteryId, outcome: "inserted" };
 }

@@ -1,6 +1,26 @@
 import { z } from "zod";
 import { slugSchema } from "../validation/slug.ts";
 
+export const reviewedImageSchema = z.object({
+  url: z
+    .url()
+    .refine(
+      (value) => new URL(value).hostname === "upload.wikimedia.org",
+      "Image must use Wikimedia's upload host",
+    ),
+  alt_text: z.string().min(1).max(300),
+  creator: z.string().min(1).max(500),
+  license: z.string().min(1).max(100),
+  attribution: z.string().min(1).max(700),
+  source_url: z
+    .url()
+    .refine(
+      (value) => new URL(value).hostname === "commons.wikimedia.org",
+      "Image source must be a Wikimedia Commons page",
+    ),
+  source_external_id: z.string().min(1).max(500),
+});
+
 /** What a DedupedCandidate from an ingestion run becomes after a human has
  *  actually looked at it. Every field here is something Wikidata cannot
  *  supply and this project will not invent: an editorial description, a
@@ -39,6 +59,7 @@ export const reviewedCandidateSchema = z
       .optional(),
     categories: z.array(slugSchema).min(1),
     dead_score: z.number().int().min(0).max(100),
+    image: reviewedImageSchema.nullable().optional(),
     confirmed: z.literal(true),
   })
   .refine(

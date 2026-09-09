@@ -125,10 +125,14 @@ h3 { font: 2rem/1.15 Georgia, serif; margin: 2rem 0 1rem; }
 
 /* Profiles: /people/[slug] and /cemeteries/[slug] */
 .profile-page { padding-block: 3rem 5rem; }
-.profile-page article { max-width: 44rem; }
+.profile-page article { max-width: 52rem; }
 .profile-hero { margin-bottom: 2rem; }
+.profile-hero-with-image { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: clamp(1.5rem, 5vw, 3.5rem); align-items: start; }
 .profile-hero h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); letter-spacing: -.03em; margin: 0 0 .75rem; }
 .profile-hero .lifespan { color: var(--accent); font-size: .9375rem; letter-spacing: .04em; margin-bottom: 1rem; }
+.profile-portrait { margin: 0; }
+.profile-portrait-frame { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: #17221b; }
+.profile-portrait figcaption { margin-top: .65rem; color: var(--muted); font-size: .7rem; line-height: 1.4; }
 .profile-page section { margin-block: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
 .profile-page section h2 { font-size: 1.375rem; margin: 0 0 1rem; }
 .profile-page section p { margin: 0 0 1rem; }
@@ -143,6 +147,7 @@ h3 { font: 2rem/1.15 Georgia, serif; margin: 2rem 0 1rem; }
 .related-list a:hover .list-name, .related-list a:focus-visible .list-name { color: var(--accent); }
 .related-list .list-name { font-weight: 700; display: block; }
 .related-list .list-meta { color: var(--muted); font-size: .8125rem; }
+@media (max-width: 760px) { .profile-hero-with-image { grid-template-columns: 1fr; } .profile-portrait { max-width: 22rem; } }
 
 /* Search */
 .search-page { padding-block: 3rem 5rem; max-width: 42rem; }
