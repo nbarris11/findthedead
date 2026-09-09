@@ -1,5 +1,7 @@
 # Roadmap
 
+National collection update (2026-09-09): a resumable collector has completed all 50 states and DC, producing a local review library of 97,165 unique candidate people and 97,439 burial claims. It includes Census state/county matching, public-profile deduplication, dense-area pagination, and separate research/evidence caches. All 51 searches completed without pending or capped queries. This does not expand the public site automatically; the next editorial step is selecting and verifying national release batches. See `docs/NATIONAL-COLLECTOR.md` and `data/ingestion-runs/us-national/REPORT.md`.
+
 1. Foundation: Next.js, TypeScript, Tailwind, layout, minimal homepage, metadata, documentation, environment template. Validate lint/typecheck/build and HTTP response. Commit independently.
 2. Database: Supabase/PostGIS migrations, constraints/RLS/indexes, typed contracts, bounded geographic RPCs, 20–50 sourced development records, deterministic seed tooling and critical tests. Validate offline and SQL where local PostGIS is available. Commit independently.
 3. Explore: Mapbox native clustering, filters, bounds search, location/errors, accessible mobile preview sheet. Install Mapbox here.

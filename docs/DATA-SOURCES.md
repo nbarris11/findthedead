@@ -43,6 +43,18 @@ Wave 1 includes George Gipp, Frederic Baraga, John D. Voelker, Dominic Jacobetti
 
 Wave 2 adds 40 more reviewed people, split evenly across the Upper Peninsula, northern Lower Peninsula, Mid Michigan, South/West Michigan, and the Thumb/east side. It is saved at `data/reviewed-runs/michigan-statewide-wave-2.json`. All 40 have original biographies and hooks, revision-pinned personal sources, reviewed categories and Dead Scores, and Michigan burial locations. Thirty-eight also have a Wikimedia Commons portrait whose direct upload URL, creator, license, attribution, source page, and external file ID were reviewed and recorded; Fred Burke and Carroll Watson Rankin remain intentionally text-only because no suitable licensed image was found. The publisher treats image and image-source insertion as an idempotent part of a reviewed candidate, while public release remains a separate guarded action. Wave 2 was released on 2026-09-09, publishing all 40 people and 29 linked cemeteries; 12 of those cemeteries were already public, bringing the collection to 116 people, 62 cemeteries, and 38 licensed images.
 
+## National discovery — 2026-09-09
+
+The national collector completed searches across all 50 states and Washington, DC: 97,439 burial claims representing 97,165 unique Wikidata people. All 51 searches finished with zero pending boxes or unresolved result caps. Ordered pagination recovered records from dense areas after geographic subdivision reached its limit.
+
+The review queue includes 64,318 people with English Wikipedia articles and 52,210 with Commons filenames; these are source leads, not approved biographies or licensed images. Public-database deduplication matched 107 existing profiles. Review flags identify 262 people with multiple burial claims, 4,227 people with name collisions, 7,482 without an English name, and 17 needing county review. No national candidates were published by these commands.
+
+The geographic source is the Census TIGERweb state/county service, cached at 0.002-degree simplification with retrieval metadata. The person/burial relationship comes from Wikidata's `P119` statements, filtered to people with a death date and a geocoded burial place. The separate evidence command preserves references, rank, qualifiers, and date precision for researched candidates. Attached references vary in quality and can cite third-party directories; an attached citation does not establish an independently verified burial.
+
+The initial enrichment cache covers 519 people across the national run, with zero failed enrichment requests. Their evidence files contain 522 nondeprecated burial statements: 401 have attached references and 121 do not. Missing references are flagged for review; reference checks for the rest of the library remain pending. This sample is selected for available source material, not a statistically representative sample of all candidates.
+
+Raw data and the readable report are stored locally under `data/ingestion-runs/us-national/` and remain gitignored. See [National collector instructions](NATIONAL-COLLECTOR.md) for resumable collection, deduplication, research enrichment, and burial-evidence commands. National discovery is complete for this source/query scope, not a complete inventory of all people buried in the United States.
+
 ## Technical references consulted
 
 - https://nextjs.org/docs/app/getting-started/installation
