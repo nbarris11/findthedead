@@ -27,3 +27,10 @@ test("query subdivisions cover both halves and invalid limits cannot enter SPARQ
   assert.throws(() => buildBurialBoxQuery([-100,30,-80,40], Infinity));
   assert.throws(() => buildBurialBoxQuery([100,30,-80,40]));
 });
+
+test("dense-area pagination uses stable ordering and validates offsets", () => {
+  const query = buildBurialBoxQuery([-78,38,-76,40], 2000, 4000);
+  assert.match(query, /ORDER BY .*\nLIMIT 2000\nOFFSET 4000/);
+  assert.throws(() => buildBurialBoxQuery([-78,38,-76,40], 2000, -1));
+  assert.throws(() => buildBurialBoxQuery([-78,38,-76,40], 2000, NaN));
+});

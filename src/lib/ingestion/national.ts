@@ -40,12 +40,14 @@ export function splitBox([west, south, east, north]: Box): Box[] {
   return [[west, south, east, mid], [west, mid, east, north]];
 }
 
-export function buildBurialBoxQuery(box: Box, limit = 2000): string {
+export function buildBurialBoxQuery(box: Box, limit = 2000, offset?: number): string {
   const [west, south, east, north] = box;
   if (!box.every(Number.isFinite) || west >= east || south >= north || west < -180 || east > 180 || south < -90 || north > 90 || !Number.isInteger(limit) || limit < 1 || limit > 10000)
     throw new Error("Invalid national query bounds or limit");
-  return buildBurialRadiusQuery(0, 0, 1, limit).replace(
+  if (offset !== undefined && (!Number.isSafeInteger(offset) || offset < 0)) throw new Error("Invalid query offset");
+  const query = buildBurialRadiusQuery(0, 0, 1, limit).replace(
     /SERVICE wikibase:around \{[\s\S]*?\n  \}/,
     `SERVICE wikibase:box {\n    ?burialPlace wdt:P625 ?burialCoord.\n    bd:serviceParam wikibase:cornerWest "Point(${west} ${south})"^^geo:wktLiteral.\n    bd:serviceParam wikibase:cornerEast "Point(${east} ${north})"^^geo:wktLiteral.\n  }`,
   );
+  return offset === undefined ? query : query.replace(`LIMIT ${limit}`, `ORDER BY ?person ?burialPlace ?birth ?death ?image ?article ?burialCoord\nLIMIT ${limit}\nOFFSET ${offset}`);
 }

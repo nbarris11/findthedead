@@ -57,7 +57,7 @@ async function boundaries(layer: number, name: string): Promise<Boundary[]> {
 }
 
 type Candidate = IngestionCandidate & { slug: string; state: string; state_name: string; county: string | null; county_geoid: string | null; dedupe_status: string; review_required: true };
-type Task = { box: Box; depth: number };
+type Task = { box: Box; depth: number; offset?: number };
 type Checkpoint = { state: string; started_at: string; completed_at: string | null; pending: Task[]; queries: number; candidates: Candidate[]; errors: string[]; capped_boxes: Box[]; excluded_rows: number };
 
 async function main() {
@@ -81,6 +81,11 @@ async function main() {
     const code = state.properties.STUSAB;
     const file = resolve(directory, `${code}.json`);
     const checkpoint: Checkpoint = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : { state: code, started_at: new Date().toISOString(), completed_at: null, pending: boundaryBoxes(state).map(box => ({ box, depth: 0 })), queries: 0, candidates: [], errors: [], capped_boxes: [], excluded_rows: 0 };
+    if (checkpoint.capped_boxes.length) {
+      checkpoint.pending.push(...checkpoint.capped_boxes.map(box => ({box, depth:10, offset:0})));
+      checkpoint.capped_boxes = [];
+      checkpoint.completed_at = null;
+    }
     if (checkpoint.completed_at) { console.log(`${code}: cached ${checkpoint.candidates.length}`); continue; }
     const localCounties = counties.filter(c => c.properties.STATE === state.properties.GEOID || c.properties.GEOID.startsWith(state.properties.GEOID));
     const seen = new Set(checkpoint.candidates.map(c => `${c.wikidata_id}:${c.burial_place_wikidata_id}`));
@@ -88,7 +93,7 @@ async function main() {
     console.log(`${code}: collecting ${state.properties.NAME}`);
     while (checkpoint.pending.length) {
       const task = checkpoint.pending[0];
-      const query = buildBurialBoxQuery(task.box);
+      const query = buildBurialBoxQuery(task.box, 2000, task.depth >= 10 ? task.offset ?? 0 : undefined);
       const url = `https://query.wikidata.org/sparql?${new URLSearchParams({query, format: "json"})}`;
       try {
         const response = await request(url) as SparqlResponse;
@@ -99,7 +104,6 @@ async function main() {
           save(file, checkpoint);
           continue;
         }
-        if (response.results.bindings.length >= 2000) checkpoint.capped_boxes.push(task.box);
         for (const c of normalizeSparqlResults(response, new Date().toISOString(), url)) {
           const { burial_place_longitude: lon, burial_place_latitude: lat } = c;
           if (lon === null || lat === null || !containsPoint(state, lon, lat)) { checkpoint.excluded_rows++; continue; }
@@ -110,7 +114,10 @@ async function main() {
           const slug = slugify(c.name);
           checkpoint.candidates.push({...c, slug, state: code, state_name: state.properties.NAME, county: county?.properties.NAME ?? null, county_geoid: county?.properties.GEOID ?? null, dedupe_status: existingIds.has(c.wikidata_id) || existingSlugs.has(slug) ? "possible_duplicate" : "new", review_required: true});
         }
-        checkpoint.pending.shift();
+        if (response.results.bindings.length >= 2000) {
+          checkpoint.pending[0] = {...task, offset:(task.offset ?? 0)+2000};
+          console.log(`${code}: paging dense area from row ${checkpoint.pending[0].offset}`);
+        } else checkpoint.pending.shift();
         save(file, checkpoint);
         await new Promise(r => setTimeout(r, 1000));
       } catch (e) {
