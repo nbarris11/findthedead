@@ -1,7 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { reviewedCandidateSchema } from "../src/lib/ingestion/reviewed.ts";
-import { cemeterySlugForInsert } from "../src/lib/ingestion/publish.ts";
+import {
+  cemeterySlugForInsert,
+  reviewedImageSourceRow,
+} from "../src/lib/ingestion/publish.ts";
 
 function reviewed(overrides: Record<string, unknown> = {}) {
   return {
@@ -76,6 +79,25 @@ test("reviewedCandidateSchema: accepts fully attributed Commons images", () => {
     }),
   );
   assert.equal(result.success, true);
+});
+
+test("reviewed image source belongs only to the image", () => {
+  const candidate = reviewedCandidateSchema.parse(
+    reviewed({
+      image: {
+        url: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Portrait.jpg",
+        alt_text: "Historical portrait of David Dunbar Buick.",
+        creator: "Example photographer",
+        license: "Public domain",
+        attribution: "Example photographer · Public domain · Wikimedia Commons",
+        source_url: "https://commons.wikimedia.org/wiki/File:Portrait.jpg",
+        source_external_id: "Portrait.jpg",
+      },
+    }),
+  );
+  const source = reviewedImageSourceRow(candidate, "image-id");
+  assert.equal(source.image_id, "image-id");
+  assert.equal("person_id" in source, false);
 });
 
 test("reviewedCandidateSchema: rejects untrusted image hosts and missing attribution", () => {

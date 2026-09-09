@@ -14,6 +14,23 @@ function wikidataEntityUrl(qid: string): string {
   return `https://www.wikidata.org/wiki/${qid}`;
 }
 
+export function reviewedImageSourceRow(
+  candidate: ReviewedCandidate,
+  imageId: string,
+) {
+  if (!candidate.image) throw new Error("Reviewed image metadata is required");
+  return {
+    source_type: "commons" as const,
+    url: candidate.image.source_url,
+    external_id: candidate.image.source_external_id,
+    retrieved_at: new Date().toISOString(),
+    field: "image,license,attribution",
+    confidence: 1,
+    notes: "License and attribution reviewed from the file's Commons metadata.",
+    image_id: imageId,
+  };
+}
+
 export function cemeterySlugForInsert(
   name: string,
   wikidataId: string,
@@ -70,17 +87,9 @@ async function ensureReviewedImage(
     throw new Error("Could not look up image source", { cause: findSourceError });
   if (existingSource) return;
 
-  const { error: insertSourceError } = await db.from("sources").insert({
-    source_type: "commons",
-    url: candidate.image.source_url,
-    external_id: candidate.image.source_external_id,
-    retrieved_at: new Date().toISOString(),
-    field: "image,license,attribution",
-    confidence: 1,
-    notes: "License and attribution reviewed from the file's Commons metadata.",
-    person_id: personId,
-    image_id: imageId,
-  });
+  const { error: insertSourceError } = await db
+    .from("sources")
+    .insert(reviewedImageSourceRow(candidate, imageId));
   if (insertSourceError)
     throw new Error("Could not insert image source", { cause: insertSourceError });
 }
