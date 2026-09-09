@@ -52,6 +52,12 @@ test("reviewedCandidateSchema: rejects an empty categories array", () => {
   assert.equal(reviewedCandidateSchema.safeParse(reviewed({ categories: [] })).success, false);
 });
 
+test("reviewedCandidateSchema: supports multiple role tags but rejects unknown and duplicate tags", () => {
+  assert.equal(reviewedCandidateSchema.safeParse(reviewed({ categories: ["presidents", "politics", "military"] })).success, true);
+  assert.equal(reviewedCandidateSchema.safeParse(reviewed({ categories: ["presdients"] })).success, false);
+  assert.equal(reviewedCandidateSchema.safeParse(reviewed({ categories: ["sports", "sports"] })).success, false);
+});
+
 test("reviewedCandidateSchema: rejects an out-of-range dead_score", () => {
   assert.equal(reviewedCandidateSchema.safeParse(reviewed({ dead_score: 101 })).success, false);
   assert.equal(reviewedCandidateSchema.safeParse(reviewed({ dead_score: -1 })).success, false);

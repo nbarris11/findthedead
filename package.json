@@ -21,6 +21,8 @@
     "enrich:us": "node --experimental-strip-types scripts/enrich-us.ts",
     "report:us": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/report-us.ts",
     "evidence:us": "node --experimental-strip-types scripts/evidence-us.ts",
+    "research:us": "node --max-old-space-size=2048 --experimental-strip-types scripts/research-us.ts",
+    "release:batch": "node --experimental-strip-types scripts/release-batch.ts",
     "publish:reviewed": "node --experimental-strip-types scripts/publish-reviewed-candidates.ts",
     "release:reviewed": "node --experimental-strip-types scripts/release-reviewed-candidates.ts"
   },

@@ -12,6 +12,7 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { reviewedCandidateSchema } from "../src/lib/ingestion/reviewed.ts";
 import type { Database } from "../src/types/database.ts";
+import { assertReviewedContent, assertReviewedCemetery } from "../src/lib/ingestion/release-guards.ts";
 
 function fail(message: string): never {
   throw new Error(`Release guard failed: ${message}`);
@@ -19,9 +20,10 @@ function fail(message: string): never {
 
 async function main() {
   const filePath = process.argv[2];
-  if (!filePath || filePath.startsWith("--") || !process.argv.includes("--confirm")) {
+  const checkOnly = process.argv.includes("--check");
+  if (!filePath || filePath.startsWith("--") || (!process.argv.includes("--confirm") && !checkOnly) || (checkOnly && process.argv.includes("--confirm"))) {
     console.error(
-      "Usage: npm run release:reviewed -- <path-to-reviewed-run.json> --confirm",
+      "Usage: npm run release:reviewed -- <path-to-reviewed-run.json> --confirm | --check",
     );
     process.exitCode = 1;
     return;
@@ -31,7 +33,9 @@ async function main() {
 
   const url = z.url().parse(process.env.NEXT_PUBLIC_SUPABASE_URL);
   const serviceRoleKey = z.string().min(1).parse(
-    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    checkOnly
+      ? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      : process.env.SUPABASE_SERVICE_ROLE_KEY,
   );
   const raw = JSON.parse(readFileSync(filePath, "utf8"));
   const parsed = z
@@ -52,7 +56,7 @@ async function main() {
 
   const { data: people, error: peopleError } = await db
     .from("people")
-    .select("id,slug,status,is_fixture")
+    .select("*")
     .in("slug", slugs);
   if (peopleError) throw new Error("Could not load reviewed people", { cause: peopleError });
   if (people.length !== parsed.length)
@@ -63,9 +67,27 @@ async function main() {
     fail("the database returned a person outside the reviewed set.");
 
   const personIds = people.map((person) => person.id);
+  const [{ data: categories, error: categoriesError }, { data: assignments, error: assignmentsError }] =
+    await Promise.all([
+      db.from("categories").select("id,slug"),
+      db.from("person_categories").select("person_id,category_id").in("person_id", personIds),
+    ]);
+  if (categoriesError || assignmentsError)
+    throw new Error("Could not verify reviewed tags", { cause: categoriesError ?? assignmentsError });
+  for (const candidate of parsed) {
+    const person = people.find((p) => p.slug === candidate.slug)!;
+    assertReviewedContent(candidate, person);
+    if (person.wikidata_id !== candidate.wikidata_id)
+      fail(`identity mismatch for ${candidate.slug}.`);
+    for (const slug of candidate.categories) {
+      const category = categories.find((c) => c.slug === slug);
+      if (!category || !assignments.some((a) => a.person_id === person.id && a.category_id === category.id))
+        fail(`${candidate.slug} is missing its reviewed ${slug} tag.`);
+    }
+  }
   const { data: burials, error: burialsError } = await db
     .from("burials")
-    .select("person_id,cemetery_id")
+    .select("id,person_id,cemetery_id")
     .in("person_id", personIds)
     .eq("is_primary", true);
   if (burialsError) throw new Error("Could not load primary burials", { cause: burialsError });
@@ -75,6 +97,19 @@ async function main() {
     new Set(burials.map((burial) => burial.person_id)).size !== people.length
   )
     fail("every reviewed person must have exactly one primary cemetery burial.");
+
+  const { data: burialSources, error: burialSourcesError } = await db
+    .from("sources").select("burial_id,url,source_type,notes")
+    .in("burial_id", burials.map((b) => b.id));
+  if (burialSourcesError) throw new Error("Could not verify burial evidence", { cause: burialSourcesError });
+  for (const candidate of parsed) {
+    if (!candidate.burial_evidence) continue;
+    const person = people.find((p) => p.slug === candidate.slug)!;
+    const burial = burials.find((b) => b.person_id === person.id)!;
+    const evidence = candidate.burial_evidence;
+    if (!burialSources.some((s) => s.burial_id === burial.id && s.url === evidence.url && s.source_type === evidence.source_type && s.notes === evidence.notes))
+      fail(`${candidate.slug} is missing its reviewed burial evidence.`);
+  }
 
   const cemeteryIds = [
     ...new Set(burials.map((burial) => burial.cemetery_id).filter(Boolean)),
@@ -89,6 +124,34 @@ async function main() {
     fail("one or more linked cemeteries are missing.");
   if (cemeteries.some((cemetery) => cemetery.is_fixture))
     fail("the reviewed set unexpectedly links to a fixture cemetery.");
+
+  const { data: cemeterySources, error: cemeterySourcesError } = await db.from("sources")
+    .select("cemetery_id,external_id,source_type").in("cemetery_id", cemeteryIds);
+  if (cemeterySourcesError) throw new Error("Could not verify cemetery identity", { cause: cemeterySourcesError });
+  const { data: profileSources, error: profileSourcesError } = await db.from("sources")
+    .select("person_id,url,source_type").in("person_id", personIds);
+  if (profileSourcesError) throw new Error("Could not verify biography citations", { cause: profileSourcesError });
+  for (const candidate of parsed) {
+    const person = people.find((p) => p.slug === candidate.slug)!;
+    const burial = burials.find((b) => b.person_id === person.id)!;
+    assertReviewedCemetery(candidate, burial.cemetery_id!, cemeterySources);
+    if (candidate.profile_source_url && !profileSources.some((s) => s.person_id === person.id && s.url === candidate.profile_source_url && s.source_type === (candidate.profile_source_type ?? "wikipedia")))
+      fail(`${candidate.slug} is missing its reviewed biography citation.`);
+    if (candidate.image) {
+      const { data: image, error: imageError } = await db.from("images").select("*")
+        .eq("person_id", person.id).eq("url", candidate.image.url).eq("is_primary", true).maybeSingle();
+      if (imageError || !image || ["alt_text", "creator", "license", "attribution"].some((key) => image[key as keyof typeof image] !== candidate.image![key as keyof typeof candidate.image]))
+        fail(`${candidate.slug} image does not match reviewed metadata.`);
+      const { data: imageSource, error: imageSourceError } = await db.from("sources").select("id")
+        .eq("image_id", image.id).eq("url", candidate.image.source_url).eq("source_type", "commons").limit(1).maybeSingle();
+      if (imageSourceError || !imageSource) fail(`${candidate.slug} image is missing its Commons citation.`);
+    }
+  }
+
+  if (checkOnly) {
+    console.log(`Read-only release checks passed for ${parsed.length} publicly visible profiles. No database writes.`);
+    return;
+  }
 
   const { error: publishCemeteriesError } = await db
     .from("cemeteries")

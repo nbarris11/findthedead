@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { slugSchema } from "../validation/slug.ts";
+import { reviewedCategories } from "./categories.ts";
 
 export const reviewedImageSchema = z.object({
   url: z
@@ -44,6 +45,14 @@ export const reviewedCandidateSchema = z
     burial_place_name: z.string().min(1),
     burial_place_latitude: z.number().min(-90).max(90),
     burial_place_longitude: z.number().min(-180).max(180),
+    burial_place_city: z.string().min(1).max(200).optional(),
+    burial_place_state: z.string().min(1).max(200).optional(),
+    burial_evidence: z.object({
+      url: z.url().refine((s) => s.startsWith("https://"), "Must be HTTPS"),
+      source_type: z.enum(["official", "historical"]),
+      reviewed_at: z.iso.datetime(),
+      notes: z.string().min(30).max(1500),
+    }).optional(),
     short_description: z.string().min(1).max(500),
     // An original, paraphrased biography paragraph and editorial hook —
     // optional because a reviewer may confirm a candidate before writing
@@ -57,7 +66,11 @@ export const reviewedCandidateSchema = z
       .refine((s) => s.startsWith("https://"), "Must be HTTPS")
       .nullable()
       .optional(),
-    categories: z.array(slugSchema).min(1),
+    profile_source_type: z.enum(["wikipedia", "official", "historical"]).optional(),
+    categories: z.array(slugSchema.refine(
+      (slug) => reviewedCategories.some((category) => category.slug === slug),
+      "Unknown reviewed category",
+    )).min(1).refine((slugs) => new Set(slugs).size === slugs.length, "Duplicate categories"),
     dead_score: z.number().int().min(0).max(100),
     image: reviewedImageSchema.nullable().optional(),
     confirmed: z.literal(true),
