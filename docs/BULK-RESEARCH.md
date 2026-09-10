@@ -218,3 +218,11 @@ for the persistent CLI connection and transactional directory publisher. Documen
 entries preserve unconfirmed interment/memorial status and omit editorial copy,
 role tags, exact days and photos. The existing verified-profile workflow above
 remains in place for enriched profiles. Read the latest handoff before publishing.
+
+The directory pipeline is now deployed and has published 939 cemetery records.
+Public total: 1,084 people (145 profiles + 939 records), 69 cemeteries, 38 images. All 939
+passed public data/provenance checks; live sample pages, search, maps, cemetery
+links and sitemap passed. Both government collectors finished; the optional
+biography/image collector is paused. Earlier running/access counts in this guide
+are historical. Use the current `RESEARCH-HANDOFF.md` for exact checkpoints and
+released batch IDs. The direct CLI connection supersedes manual browser access.

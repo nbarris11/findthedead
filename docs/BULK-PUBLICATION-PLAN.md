@@ -131,3 +131,20 @@ Read `data/ingestion-runs/us-national/bulk-reconciliation/latest.json` for the
 report directory. Never treat `review-*.json` as reviewed publication input.
 Five new tests cover namesakes, date conflicts, alias holds, cemetery ambiguity,
 and multiple interments. Full suite: 109 passing tests; TypeScript and lint pass.
+
+## Implemented and released September 9
+
+The first full cohort is live: **939 documentary cemetery records**, bringing
+public people to **1,084**. Persistent Supabase CLI access, record-aware UI,
+transactional batch publishing, private immutable ledger and withdrawal are in
+place. All 939 passed public field/provenance checks; live page samples, search,
+map APIs, Arlington links and all 1,084 sitemap URLs passed. The remaining 936
+published in10.822 seconds after a 3-record canary; preparation time is separate.
+
+Fresh identity validation held 149 of 1,088 exact candidates. The Arlington source
+is complete at 431,355 rows. VA collection finished at 918,325 rows, with 23 capped
+query groups retained as incomplete. A fresh public identity
+snapshot produced the next review lanes: 418 exact candidates, 2,374 name variants
+and 563 conflicts, with 954 already-public candidates excluded. These are review
+lanes, not approved records. Earlier partial counts in this document are
+historical, not current publication totals. Read `RESEARCH-HANDOFF.md` first.
