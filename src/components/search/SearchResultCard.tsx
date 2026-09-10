@@ -28,9 +28,11 @@ export function SearchResultCard({ result }: { result: SearchResult }) {
       <Link href={`/people/${person.slug}`} className="person-card-link">
         <div className="person-card-heading">
           <h3>{person.name}</h3>
-          <span className="dead-score" aria-label={`Dead Score ${person.dead_score} of 100`}>
+          {person.profile_tier === "cemetery_record" ? (
+            <span className="result-type-badge">Cemetery record</span>
+          ) : <span className="dead-score" aria-label={`Dead Score ${person.dead_score} of 100`}>
             {person.dead_score}
-          </span>
+          </span>}
         </div>
         <p className="lifespan">
           {formatLifespan(person.birth_year, person.death_year)}

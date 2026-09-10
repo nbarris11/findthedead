@@ -44,7 +44,8 @@ export default async function PersonPage({ params }: PageProps) {
   const person = await personProfile(slug).catch(() => null);
   if (!person) notFound();
 
-  const isExact = person.location_precision === "exact_grave";
+  const isRecord = person.profile_tier === "cemetery_record";
+  const isExact = !isRecord && person.location_precision === "exact_grave";
   const primaryImage = person.images[0];
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
   const nearby = (
@@ -84,6 +85,7 @@ export default async function PersonPage({ params }: PageProps) {
             {person.categories.length > 0 && (
               <p className="eyebrow">{person.categories.join(" · ")}</p>
             )}
+            {isRecord && <p className="eyebrow">Cemetery record</p>}
             <h1>{person.name}</h1>
             <p className="lifespan">
               {formatLifespan(person.birth_year, person.death_year)}
@@ -125,10 +127,10 @@ export default async function PersonPage({ params }: PageProps) {
         )}
 
         <section aria-labelledby="burial-heading" className="burial-section">
-          <h2 id="burial-heading">Resting place</h2>
+          <h2 id="burial-heading">{isRecord ? "Cemetery record" : "Resting place"}</h2>
           {person.cemetery ? (
             <p>
-              Buried at{" "}
+              {isRecord ? "Listed in records at " : "Buried at "}
               <Link href={`/cemeteries/${person.cemetery.slug}`}>
                 {person.cemetery.name}
               </Link>
@@ -137,6 +139,19 @@ export default async function PersonPage({ params }: PageProps) {
             </p>
           ) : (
             <p className="muted">Burial location not recorded.</p>
+          )}
+          {isRecord && (
+            <>
+              <p>This official record has been matched to this person by name and lifespan.
+                Whether it identifies an interment or memorial has not been independently confirmed.</p>
+              {person.record_details && (
+                <dl className="meta-list">
+                  <div><dt>Source record</dt><dd>{person.record_details.source_record_id}</dd></div>
+                  {person.record_details.section && <div><dt>Recorded section</dt><dd>{person.record_details.section}</dd></div>}
+                  {person.record_details.grave && <div><dt>Recorded grave reference</dt><dd>{person.record_details.grave}</dd></div>}
+                </dl>
+              )}
+            </>
           )}
           <p className="precision-note">
             {isExact
@@ -187,6 +202,9 @@ export default async function PersonPage({ params }: PageProps) {
                 </li>
               ))}
             </ul>
+          )}
+          {isRecord && person.record_details && (
+            <p className="muted">{person.record_details.disclaimer}</p>
           )}
           {person.wikipedia_url && (
             <p>

@@ -2,6 +2,12 @@
 export type Precision =
   "exact_grave" | "cemetery_section" | "cemetery" | "approximate" | "unknown";
 export type Status = "draft" | "published";
+export type ProfileTier = "profile" | "cemetery_record";
+export type CemeteryRecordDetails = {
+  disposition: "unconfirmed"; provider: "arlington";
+  source_record_id: string; source_url: string; source_sha256: string;
+  retrieved_at: string; section: string; grave: string; disclaimer: string;
+};
 type Timestamps = { created_at: string; updated_at: string };
 export type PersonRow = Timestamps & {
   id: string;
@@ -18,6 +24,8 @@ export type PersonRow = Timestamps & {
   wikipedia_url: string | null;
   dead_score: number;
   is_featured: boolean;
+  profile_tier: ProfileTier;
+  record_details: CemeteryRecordDetails | null;
   status: Status;
   is_fixture: boolean;
 };
@@ -94,6 +102,8 @@ export type ImageRow = {
   created_at: string;
 };
 export type DiscoveryPerson = {
+  /** Optional during rolling deployment; older RPC responses are enriched profiles. */
+  profile_tier?: ProfileTier;
   id: string;
   slug: string;
   name: string;
@@ -142,6 +152,7 @@ export type CemeteryProfileRow = Pick<
  *  score, coordinates, precision, categories) plus the fields a discovery
  *  feed has no use for. */
 export type ProfilePerson = DiscoveryPerson & {
+  record_details?: CemeteryRecordDetails | null;
   birth_date: string | null;
   death_date: string | null;
   biography: string | null;

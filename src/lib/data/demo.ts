@@ -16,6 +16,7 @@ export function demoPeople(input: Seed): DiscoveryPerson[] {
     const c = seed.cemeteries.find((c) => c.id === p.cemetery_id)!;
     return {
       id: p.id,
+      profile_tier: "profile",
       slug: p.slug,
       name: p.name,
       birth_year: p.birth_year,
@@ -74,6 +75,8 @@ export function demoPersonProfile(input: Seed, slug: string): ProfilePerson | nu
   const c = seed.cemeteries.find((c) => c.id === p.cemetery_id)!;
   return {
     id: p.id,
+    profile_tier: "profile",
+    record_details: null,
     slug: p.slug,
     name: p.name,
     birth_year: p.birth_year,

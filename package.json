@@ -22,9 +22,16 @@
     "report:us": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/report-us.ts",
     "evidence:us": "node --experimental-strip-types scripts/evidence-us.ts",
     "research:us": "node --max-old-space-size=2048 --experimental-strip-types scripts/research-us.ts",
+    "match:authority": "node --experimental-strip-types scripts/match-authority.ts",
+    "plan:authority": "node --experimental-strip-types scripts/plan-authority-coverage.ts",
+    "collect:arlington": "node --experimental-strip-types scripts/collect-arlington.ts",
     "release:batch": "node --experimental-strip-types scripts/release-batch.ts",
     "publish:reviewed": "node --experimental-strip-types scripts/publish-reviewed-candidates.ts",
-    "release:reviewed": "node --experimental-strip-types scripts/release-reviewed-candidates.ts"
+    "release:reviewed": "node --experimental-strip-types scripts/release-reviewed-candidates.ts",
+    "reconcile:bulk": "node --experimental-strip-types scripts/reconcile-bulk-evidence.ts",
+    "db:check": "supabase db query --linked \"select current_user, count(*) as published_people from public.people where status = 'published' group by current_user\"",
+    "prepare:directory": "node --env-file=.env.local --experimental-strip-types scripts/prepare-directory.ts",
+    "publish:directory": "node --experimental-strip-types scripts/publish-directory.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.115.0",

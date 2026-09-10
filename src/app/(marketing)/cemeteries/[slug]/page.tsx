@@ -90,7 +90,7 @@ export default async function CemeteryPage({ params }: PageProps) {
         </section>
 
         <section aria-labelledby="notable-heading" className="related-section">
-          <h2 id="notable-heading">Notable people</h2>
+          <h2 id="notable-heading">People and cemetery records</h2>
           {cemetery.people.length === 0 ? (
             <p className="muted">No published records yet.</p>
           ) : (

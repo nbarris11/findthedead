@@ -29,7 +29,8 @@ export function PersonSheet({ person, distanceMeters, onClose }: PersonSheetProp
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
-  const isExact = person.location_precision === "exact_grave";
+  const isRecord = person.profile_tier === "cemetery_record";
+  const isExact = !isRecord && person.location_precision === "exact_grave";
 
   return (
     <>
@@ -57,7 +58,7 @@ export function PersonSheet({ person, distanceMeters, onClose }: PersonSheetProp
         <dl className="meta-list">
           {person.cemetery_name && (
             <div>
-              <strong>Buried at </strong>
+              <strong>{isRecord ? "Cemetery record at " : "Buried at "}</strong>
               {person.cemetery_name}
             </div>
           )}
@@ -68,6 +69,7 @@ export function PersonSheet({ person, distanceMeters, onClose }: PersonSheetProp
               : formatDistance(distanceMeters)}
           </div>
         </dl>
+        {isRecord && <p className="precision-note">Interment or memorial status has not been independently confirmed.</p>}
         <p className="precision-note">
           {isExact
             ? "Exact grave location, as recorded by our sources."
@@ -75,7 +77,7 @@ export function PersonSheet({ person, distanceMeters, onClose }: PersonSheetProp
         </p>
         <div className="sheet-actions">
           <Link className="button" href={`/people/${person.slug}`}>
-            View profile <span aria-hidden="true">↗</span>
+            {isRecord ? "View record" : "View profile"} <span aria-hidden="true">↗</span>
           </Link>
           <a
             className="button-secondary"

@@ -103,9 +103,21 @@ export async function publicSiteRecords(): Promise<{
     };
   }
   const db = client();
+  async function listAll(table: "people" | "cemeteries") {
+    const data: PublicSiteRecord[] = [];
+    let after: string | null = null;
+    for (;;) {
+      let query = db.from(table).select("slug,updated_at").order("slug").limit(1000);
+      if (after) query = query.gt("slug", after);
+      const result = await query;
+      if (result.error) return { data, error: result.error };
+      data.push(...result.data);
+      if (result.data.length < 1000) return { data, error: null };
+      after = result.data.at(-1)!.slug;
+    }
+  }
   const [peopleResult, cemeteriesResult] = await Promise.all([
-    db.from("people").select("slug,updated_at").order("slug"),
-    db.from("cemeteries").select("slug,updated_at").order("slug"),
+    listAll("people"), listAll("cemeteries"),
   ]);
   if (peopleResult.error)
     throw new Error("Public person URLs could not be loaded", {
@@ -163,7 +175,7 @@ export async function personProfile(slug: unknown): Promise<ProfilePerson | null
       db
         .from("people")
         .select(
-          "birth_date,death_date,biography,why_interesting,wikidata_id,wikipedia_url",
+          "birth_date,death_date,biography,why_interesting,wikidata_id,wikipedia_url,record_details",
         )
         .eq("id", discovery.id)
         .single(),
