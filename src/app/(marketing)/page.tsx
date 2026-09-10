@@ -19,7 +19,7 @@ export default async function Home() {
             the dead<span>.</span>
           </h1>
           <p className="hero-description">
-            Discover the fascinating people buried around you.
+            Discover fascinating people buried near you and around the world.
           </p>
           <p className="hero-detail">
             The voices. The visionaries. The local legends.
@@ -35,26 +35,26 @@ export default async function Home() {
             </Link>
           </div>
           <p className="preview-note">
-            Michigan · New stories added as they’re reviewed
+            Worldwide & growing · New stories added as they’re reviewed
           </p>
         </div>
-        <aside className="editorial-panel" aria-label="Our statewide focus">
+        <aside className="editorial-panel" aria-label="Our growing worldwide coverage">
           <div className="panel-top">
             <span>FIELD NOTES / 001</span>
             <span aria-hidden="true">↗</span>
           </div>
           <div className="panel-title">
             <span className="eyebrow">EXPLORING</span>
-            <h2>Michigan.</h2>
+            <h2>The world.</h2>
             <p>
-              A state that changed the world.
+              Remarkable lives across borders.
               <br />
               People worth finding.
             </p>
           </div>
           <div className="panel-bottom">
             <span>MUSIC / INDUSTRY / HISTORY</span>
-            <span>MI, USA</span>
+            <span>WORLDWIDE</span>
           </div>
         </aside>
       </section>
@@ -110,12 +110,13 @@ export default async function Home() {
         <h2>A little closer to history.</h2>
         <p>
           FindTheDead is a new way to discover remarkable lives through the
-          places where people rest. We’re building across Michigan, one
-          carefully sourced story at a time.
+          places where people rest. We started in Michigan and now reach
+          around the world, one carefully sourced story at a time.
         </p>
         <p className="muted">
-          Explore the statewide map, search by name, or use your location to
-          find remarkable people buried nearby.
+          Explore the map, search by name, or use your location to
+          find remarkable people buried nearby. Coverage is still growing,
+          with more places and stories added as they’re reviewed.
         </p>
       </section>
     </main>

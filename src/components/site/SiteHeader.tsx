@@ -11,7 +11,7 @@ export function SiteHeader() {
         </span>
         FindTheDead<span className="brand-period">.</span>
       </Link>
-      <span className="edition">MICHIGAN · GROWING STATEWIDE</span>
+      <span className="edition">WORLDWIDE & GROWING</span>
       <nav className="site-nav" aria-label="Primary">
         <Link className="header-link" href="/explore">
           Explore

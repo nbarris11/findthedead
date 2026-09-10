@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "FindTheDead — remarkable lives across Michigan";
+export const alt = "FindTheDead — remarkable lives worldwide, with coverage still growing";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -45,7 +45,7 @@ export default function OpenGraphImage() {
             <span>FindTheDead.</span>
           </div>
           <span style={{ color: "#b7c0bc", letterSpacing: 4 }}>
-            MICHIGAN
+            WORLDWIDE & GROWING
           </span>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -60,7 +60,7 @@ export default function OpenGraphImage() {
             History has an address<span style={{ color: "#d8f58b" }}>.</span>
           </div>
           <div style={{ marginTop: 28, fontSize: 30, color: "#b7c0bc" }}>
-            Discover remarkable lives buried across Michigan.
+            Discover remarkable lives buried around the world.
           </div>
         </div>
       </div>
