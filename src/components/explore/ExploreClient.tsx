@@ -164,18 +164,22 @@ export function ExploreClient({
             ? "Updating results"
             : pluralizePeople(summary.total)}
         </p>
-        <p
+        <button
+          type="button"
+          onClick={() => loadNames(boundsRef.current,summary.total)}
+          disabled={summary.total===0}
+          aria-label={`Browse ${summary.total.toLocaleString()} people in this map area`}
           className="explore-status"
           data-tone={fetchState === "error" || geo.status === "denied" ? "error" : undefined}
         >
           {fetchState === "error"
             ? "Couldn’t update the map. Try panning again."
-            : pluralizePeople(summary.total)}
+            : `Browse names · ${summary.total.toLocaleString()} people`}
           {geo.status === "denied" &&
             " · Location access was denied — enable it in your browser to see distances."}
           {geo.status === "unavailable" &&
             " · Location isn’t available on this device or connection."}
-        </p>
+        </button>
         {hasToken && (
           <button
             type="button"
