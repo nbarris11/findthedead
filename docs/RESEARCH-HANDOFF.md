@@ -187,3 +187,29 @@ Preparation is read-only against public data. Directory release uses direct CLI.
 Full editorial profiles still use reviewed files and the separate guarded legacy
 publisher described in `docs/BULK-RESEARCH.md`. Waves 1–4 are already published
 (4+5+8+12). Keep their independent review and image-license guards intact.
+
+
+## September 9 continuation: map cap and national listing tier
+
+The user's screenshot revealed a map cap: 200 people were being clustered, hiding
+most public records. The new map summary counts every matching public record,
+returns bounded geographic cells and loads names in cursor pages of 50. Cemetery
+pages now paginate 100 names; sitemap output is split into 10,000-row shards.
+
+The user authorized clearly labeled Wikidata-sourced burial listings ("do whatever
+makes the most sense"). Read `NATIONAL-LISTINGS.md`. One national classification
+query returned 197,016 coordinate rows for 196,945 US cemetery identities. Joining
+that shared source to the national cache yielded 80,538 eligible listings across
+13,167 cemeteries; 15,565 held and 1,062 national people already public. There are
+22 additional public people outside the national queue, so the public baseline is
+1,084. Dates are absent unless original precision was checked. No new biographies,
+images or role tags. Known cached conflicting claims remain held.
+
+Prepared directory:
+`data/ingestion-runs/us-national/national-directory/wikidata-listings-20260910005441`.
+The first batch is a 20-record canary; remaining batches contain up to 2,000.
+Both migrations (`20260910004144_map_aggregate_counts.sql` and
+`20260910004653_wikidata_listing_batches.sql`) are applied remotely. Database map
+count verified at 1,084 before national release; security advisors found no issues.
+Tests passed at 115, TypeScript/lint passed, webpack production build passed.
+Frontend deployment and national publication are in progress at this checkpoint.

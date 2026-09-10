@@ -4,14 +4,13 @@ import { formatLifespan } from "@/lib/explore/format";
 /** Renders if NEXT_PUBLIC_MAPBOX_TOKEN is unset. The product still has to
  *  work without a map: this is a plain, fully accessible list of the same
  *  records the map would show. See docs/ARCHITECTURE.md. */
-export function MapFallback({ people }: { people: readonly DiscoveryPerson[] }) {
+export function MapFallback({ people, onBrowse }: { people: readonly DiscoveryPerson[]; onBrowse?: () => void }) {
   return (
     <div className="map-fallback">
       <p className="fallback-note">
-        The interactive map needs a Mapbox access token
-        (NEXT_PUBLIC_MAPBOX_TOKEN) that isn’t configured yet. Here are the
-        stories that would appear on it.
+        The interactive map is unavailable. You can still browse names in this area.
       </p>
+      {onBrowse && <button className="button-secondary" onClick={onBrowse}>Browse names</button>}
       <ul className="fallback-list">
         {people.map((person) => (
           <li key={person.id}>

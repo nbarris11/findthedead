@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { peopleInBounds, discoveryCategories } from "@/lib/data/repository";
+import { mapSummary, discoveryCategories } from "@/lib/data/repository";
 import { DEFAULT_BOUNDS } from "@/lib/explore/config";
 import { ExploreClient } from "@/components/explore/ExploreClient";
 
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 /** Server-fetched first paint: the map has records on screen before Mapbox's
  *  JS finishes loading and before the visitor is asked for their location. */
 export default async function ExplorePage() {
-  const [initialPeople, categories] = await Promise.all([
-    peopleInBounds(DEFAULT_BOUNDS),
+  const [initialSummary, categories] = await Promise.all([
+    mapSummary(DEFAULT_BOUNDS),
     discoveryCategories(),
   ]);
   return (
     <ExploreClient
-      initialPeople={initialPeople}
+      initialSummary={initialSummary}
       categories={categories}
       mapboxToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? ""}
     />

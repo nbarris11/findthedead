@@ -5,6 +5,11 @@ import { formatLifespan } from "@/lib/explore/format";
 
 type PersonListSheetProps = {
   people: readonly DiscoveryPerson[];
+  total: number;
+  loading: boolean;
+  error: boolean;
+  onLoadMore?: () => void;
+  onRetry: () => void;
   onSelect: (id: string) => void;
   onClose: () => void;
 };
@@ -12,7 +17,7 @@ type PersonListSheetProps = {
 /** Several burials share one coordinate (cemetery-precision records cluster
  *  even at maximum zoom), so the map hands off to a plain list instead of
  *  spinning forever trying to separate pins that never will. */
-export function PersonListSheet({ people, onSelect, onClose }: PersonListSheetProps) {
+export function PersonListSheet({ people, total, loading, error, onLoadMore, onRetry, onSelect, onClose }: PersonListSheetProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -42,9 +47,9 @@ export function PersonListSheet({ people, onSelect, onClose }: PersonListSheetPr
         >
           Close ✕
         </button>
-        <h2 id="person-list-title">{people.length} people here</h2>
+        <h2 id="person-list-title">{total.toLocaleString()} people here</h2>
         <p className="description">
-          These burials share one location. Pick a name to see their story.
+          These records share one map location. Pick a name to see its details.
         </p>
         <ul className="sheet-list">
           {people.map((person) => (
@@ -59,6 +64,9 @@ export function PersonListSheet({ people, onSelect, onClose }: PersonListSheetPr
             </li>
           ))}
         </ul>
+        <p aria-live="polite">{loading ? "Loading names…" : `${people.length.toLocaleString()} of ${total.toLocaleString()} names`}</p>
+        {error && <button className="button-secondary" onClick={onRetry}>Retry loading names</button>}
+        {onLoadMore && !error && <button className="button-secondary" disabled={loading} onClick={onLoadMore}>Load more names</button>}
       </section>
     </>
   );

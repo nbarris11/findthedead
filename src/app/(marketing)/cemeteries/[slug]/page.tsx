@@ -9,7 +9,7 @@ import { ProfileMapFallback } from "@/components/profile/ProfileMapFallback";
 
 export const dynamic = "force-dynamic";
 
-type PageProps = { params: Promise<{ slug: string }> };
+type PageProps = { params: Promise<{ slug: string }>; searchParams: Promise<{page?: string}> };
 
 export async function generateMetadata({
   params,
@@ -20,15 +20,17 @@ export async function generateMetadata({
   const location = [cemetery.city, cemetery.state].filter(Boolean).join(", ");
   return {
     title: cemetery.name,
-    description: `${cemetery.name}${location ? `, ${location}` : ""} — ${pluralizePeople(cemetery.people.length)} to discover.`,
+    description: `${cemetery.name}${location ? `, ${location}` : ""} — ${pluralizePeople(cemetery.people_total ?? cemetery.people.length)} to discover.`,
     alternates: { canonical: `/cemeteries/${cemetery.slug}` },
     robots: { index: true, follow: true },
   };
 }
 
-export default async function CemeteryPage({ params }: PageProps) {
+export default async function CemeteryPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  const cemetery = await cemeteryProfile(slug).catch(() => null);
+  const requestedPage = Number((await searchParams).page ?? 1);
+  if(!Number.isInteger(requestedPage) || requestedPage<1 || requestedPage>10000) notFound();
+  const cemetery = await cemeteryProfile(slug,requestedPage).catch(() => null);
   if (!cemetery) notFound();
 
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -46,14 +48,14 @@ export default async function CemeteryPage({ params }: PageProps) {
     <main id="main" className="profile-page">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replaceAll("<", "\\u003c") }}
       />
       <article>
         <header className="profile-hero">
           {location && <p className="eyebrow">{location}</p>}
           <h1>{cemetery.name}</h1>
           <p className="hero-description">
-            {pluralizePeople(cemetery.people.length)} to discover here.
+            {pluralizePeople(cemetery.people_total ?? cemetery.people.length)} to discover here.
           </p>
           {cemetery.description && <p>{cemetery.description}</p>}
           {cemetery.categories.length > 0 && (
@@ -110,6 +112,11 @@ export default async function CemeteryPage({ params }: PageProps) {
           )}
         </section>
 
+        {(cemetery.people_total ?? 0)>100 && <nav aria-label="Cemetery names pages" className="cta-group">
+          {requestedPage>1 && <Link className="button-secondary" href={`?page=${requestedPage-1}`}>Previous names</Link>}
+          <span>Page {requestedPage} of {Math.ceil((cemetery.people_total ?? 0)/100)}</span>
+          {requestedPage*100<(cemetery.people_total ?? 0) && <Link className="button-secondary" href={`?page=${requestedPage+1}`}>Next names</Link>}
+        </nav>}
         <section aria-labelledby="sources-heading" className="sources-section">
           <h2 id="sources-heading">Sources</h2>
           {cemetery.sources.length === 0 ? (

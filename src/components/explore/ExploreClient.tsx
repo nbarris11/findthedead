@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { CategoryOption, DiscoveryPerson } from "@/types/database";
+import type { MapSummary, MapPage } from "@/lib/explore/map-summary";
 import type { Bounds } from "@/lib/validation/geo";
 import { DEFAULT_BOUNDS, DEFAULT_VIEW, NOTABLE_MIN_SCORE } from "@/lib/explore/config";
 import { distanceMeters } from "@/lib/geo/distance";
@@ -16,10 +17,10 @@ import { PersonListSheet } from "./PersonListSheet";
 type Selection =
   | { kind: "none" }
   | { kind: "person"; id: string }
-  | { kind: "list"; ids: string[] };
+  | { kind: "list"; bounds: Bounds; total: number };
 
 type ExploreClientProps = {
-  initialPeople: DiscoveryPerson[];
+  initialSummary: MapSummary;
   categories: CategoryOption[];
   mapboxToken: string;
 };
@@ -37,11 +38,15 @@ function buildQuery(bounds: Bounds, filters: Filters): string {
 }
 
 export function ExploreClient({
-  initialPeople,
+  initialSummary,
   categories,
   mapboxToken,
 }: ExploreClientProps) {
-  const [people, setPeople] = useState(initialPeople);
+  const [summary, setSummary] = useState(initialSummary);
+  const [people, setPeople] = useState<DiscoveryPerson[]>([]);
+  const [nextPage, setNextPage] = useState<string | null>(null);
+  const [listState, setListState] = useState<"idle" | "loading" | "error">("idle");
+  const listAbortRef=useRef<AbortController | null>(null);
   const [filters, setFilters] = useState<Filters>({
     categorySlug: null,
     notableOnly: false,
@@ -65,15 +70,16 @@ export function ExploreClient({
     const controller = new AbortController();
     abortRef.current = controller;
     setFetchState("loading");
-    fetch(`/api/people/bounds?${buildQuery(bounds, nextFilters)}`, {
+    fetch(`/api/people/map?${buildQuery(bounds, nextFilters)}`, {
       signal: controller.signal,
     })
       .then((res) => {
         if (!res.ok) throw new Error("Request failed");
-        return res.json() as Promise<{ people: DiscoveryPerson[] }>;
+        return res.json() as Promise<MapSummary>;
       })
       .then((data) => {
-        setPeople(data.people);
+        if(controller.signal.aborted)return;
+        setSummary(data);
         setFetchState("idle");
       })
       .catch((error) => {
@@ -88,6 +94,7 @@ export function ExploreClient({
 
   function onFiltersChange(nextFilters: Filters) {
     setFilters(nextFilters);
+    closeSelection();
     refetch(boundsRef.current, nextFilters);
   }
 
@@ -101,13 +108,22 @@ export function ExploreClient({
     [selection, people],
   );
 
-  const selectedList = useMemo(
-    () =>
-      selection.kind === "list"
-        ? people.filter((p) => selection.ids.includes(p.id))
-        : [],
-    [selection, people],
-  );
+  function closeSelection() {
+    listAbortRef.current?.abort();
+    setSelection({kind:"none"});
+  }
+  function loadNames(bounds:Bounds,total:number,after:string|null=null) {
+    listAbortRef.current?.abort();
+    const controller=new AbortController();listAbortRef.current=controller;
+    if(!after){setPeople([]);setNextPage(null);setSelection({kind:"list",bounds,total});}
+    setListState("loading");
+    const query=new URLSearchParams(buildQuery(bounds,filters));query.set("view","names");if(after)query.set("after",after);
+    fetch(`/api/people/map?${query}`,{signal:controller.signal})
+      .then(r=>{if(!r.ok)throw new Error("Names failed");return r.json() as Promise<MapPage>;})
+      .then(data=>{if(controller.signal.aborted)return;setPeople(old=>after?[...old,...data.people]:data.people);setNextPage(data.next);setListState("idle");if(!after&&total===1&&data.people.length===1)setSelection({kind:"person",id:data.people[0].id});})
+      .catch(error=>{if(error.name!=="AbortError")setListState("error");});
+  }
+  useEffect(()=>()=>listAbortRef.current?.abort(),[]);
 
   const distance =
     selectedPerson && userLocation
@@ -132,22 +148,21 @@ export function ExploreClient({
       <div className="explore-main">
         {hasToken ? (
           <MapCanvas
-            people={people}
+            points={summary.points}
             accessToken={mapboxToken}
             initialView={DEFAULT_VIEW}
             userLocation={userLocation}
             onBoundsChange={onBoundsChange}
-            onSelectPerson={(id) => setSelection({ kind: "person", id })}
-            onSelectMany={(ids) => setSelection({ kind: "list", ids })}
+            onSelectArea={(bounds,total) => loadNames(bounds,total)}
           />
         ) : (
-          <MapFallback people={people} />
+          <MapFallback people={people} onBrowse={() => loadNames(boundsRef.current,summary.total)} />
         )}
         <FilterBar categories={categories} filters={filters} onChange={onFiltersChange} />
         <p className="visually-hidden" aria-live="polite">
           {fetchState === "loading"
             ? "Updating results"
-            : pluralizePeople(people.length)}
+            : pluralizePeople(summary.total)}
         </p>
         <p
           className="explore-status"
@@ -155,7 +170,7 @@ export function ExploreClient({
         >
           {fetchState === "error"
             ? "Couldn’t update the map. Try panning again."
-            : pluralizePeople(people.length)}
+            : pluralizePeople(summary.total)}
           {geo.status === "denied" &&
             " · Location access was denied — enable it in your browser to see distances."}
           {geo.status === "unavailable" &&
@@ -176,14 +191,19 @@ export function ExploreClient({
         <PersonSheet
           person={selectedPerson}
           distanceMeters={distance}
-          onClose={() => setSelection({ kind: "none" })}
+          onClose={closeSelection}
         />
       )}
       {selection.kind === "list" && (
         <PersonListSheet
-          people={selectedList}
+          people={people}
+          total={selection.total}
+          loading={listState === "loading"}
+          error={listState === "error"}
+          onLoadMore={nextPage ? () => loadNames(selection.bounds,selection.total,nextPage) : undefined}
+          onRetry={() => loadNames(selection.bounds,selection.total,people.length?people.at(-1)!.id:null)}
           onSelect={(id) => setSelection({ kind: "person", id })}
-          onClose={() => setSelection({ kind: "none" })}
+          onClose={closeSelection}
         />
       )}
     </div>

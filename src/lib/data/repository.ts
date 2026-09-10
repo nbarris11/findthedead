@@ -225,6 +225,7 @@ export async function personProfile(slug: unknown): Promise<ProfilePerson | null
  *  discovery read in the app. */
 export async function cemeteryProfile(
   slug: unknown,
+  page = 1,
 ): Promise<CemeteryProfile | null> {
   const s = slugSchema.parse(slug);
   if (dataConfig(process.env).mode === "demo")
@@ -240,9 +241,10 @@ export async function cemeteryProfile(
   const [peopleResult, sourcesResult, categories] = await Promise.all([
     db
       .from("discovery_people")
-      .select("*")
+      .select("*", {count:"exact"})
       .eq("cemetery_id", cemetery.id)
-      .order("dead_score", { ascending: false }),
+      .order("dead_score", { ascending: false }).order("id")
+      .range((page-1)*100,page*100-1),
     db
       .from("sources")
       .select("source_type,url,field,retrieved_at,confidence,notes")
@@ -271,6 +273,8 @@ export async function cemeteryProfile(
     latitude: cemetery.latitude,
     longitude: cemetery.longitude,
     people,
+    people_total: peopleResult.count ?? people.length,
+    page,
     categories: categories.filter((c) => categorySlugs.has(c.slug)),
     sources: sourcesResult.data ?? [],
   };
@@ -287,4 +291,28 @@ export async function searchPeople(query: unknown): Promise<DiscoveryPerson[]> {
   if (error)
     throw new Error("Search results could not be loaded", { cause: error });
   return data ?? [];
+}
+
+
+export async function mapSummary(query: unknown) {
+ const {result_limit: _limit, ...args} = boundsQuerySchema.parse(query);
+ void _limit;
+ if(dataConfig(process.env).mode === "demo") {
+  const {summaryFromPeople} = await import("../explore/map-summary");
+  return summaryFromPeople(demoInBounds(seed, {...args, result_limit:200}));
+ }
+ const result = await client().rpc("map_summary", args);
+ if(result.error) throw new Error("Map counts could not be loaded", {cause:result.error});
+ return result.data;
+}
+export async function mapPeoplePage(query: unknown, after: string | null) {
+ const {result_limit: _limit, ...args} = boundsQuerySchema.parse(query);
+ void _limit;
+ if(dataConfig(process.env).mode === "demo") {
+  const rows=demoInBounds(seed,{...args,result_limit:200}).sort((a,b)=>a.id.localeCompare(b.id)).filter(p=>!after||p.id>after);
+  return {people:rows.slice(0,50),next:rows.length>50?rows[49].id:null};
+ }
+ const result=await client().rpc("map_people_page",{...args,after_id:after});
+ if(result.error)throw new Error("Map names could not be loaded",{cause:result.error});
+ return {people:result.data.slice(0,50),next:result.data.length>50?result.data[49].id:null};
 }

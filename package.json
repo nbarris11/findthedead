@@ -31,7 +31,10 @@
     "reconcile:bulk": "node --experimental-strip-types scripts/reconcile-bulk-evidence.ts",
     "db:check": "supabase db query --linked \"select current_user, count(*) as published_people from public.people where status = 'published' group by current_user\"",
     "prepare:directory": "node --env-file=.env.local --experimental-strip-types scripts/prepare-directory.ts",
-    "publish:directory": "node --experimental-strip-types scripts/publish-directory.ts"
+    "publish:directory": "node --experimental-strip-types scripts/publish-directory.ts",
+    "prepare:national": "node --experimental-strip-types scripts/prepare-national-directory.ts",
+    "publish:national": "node --experimental-strip-types scripts/publish-national-directory.ts",
+    "collect:cemetery-types": "node --experimental-strip-types scripts/collect-cemetery-types.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.115.0",

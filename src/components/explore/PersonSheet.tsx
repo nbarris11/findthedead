@@ -29,7 +29,8 @@ export function PersonSheet({ person, distanceMeters, onClose }: PersonSheetProp
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
-  const isRecord = person.profile_tier === "cemetery_record";
+  const isListing = person.profile_tier === "wikidata_listing";
+  const isRecord = isListing || person.profile_tier === "cemetery_record";
   const isExact = !isRecord && person.location_precision === "exact_grave";
 
   return (
@@ -58,7 +59,7 @@ export function PersonSheet({ person, distanceMeters, onClose }: PersonSheetProp
         <dl className="meta-list">
           {person.cemetery_name && (
             <div>
-              <strong>{isRecord ? "Cemetery record at " : "Buried at "}</strong>
+              <strong>{isListing ? "Wikidata burial listing at " : isRecord ? "Cemetery record at " : "Buried at "}</strong>
               {person.cemetery_name}
             </div>
           )}

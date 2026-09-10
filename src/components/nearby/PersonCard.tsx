@@ -11,8 +11,8 @@ export function PersonCard({ person }: { person: NearbyPerson }) {
       <Link href={`/people/${person.slug}`} className="person-card-link">
         <div className="person-card-heading">
           <h3>{person.name}</h3>
-          {person.profile_tier === "cemetery_record" ? (
-            <span className="result-type-badge">Cemetery record</span>
+          {(person.profile_tier === "cemetery_record" || person.profile_tier === "wikidata_listing") ? (
+            <span className="result-type-badge">{person.profile_tier === "wikidata_listing" ? "Wikidata listing" : "Cemetery record"}</span>
           ) : <span className="dead-score" aria-label={`Dead Score ${person.dead_score} of 100`}>
             {person.dead_score}
           </span>}

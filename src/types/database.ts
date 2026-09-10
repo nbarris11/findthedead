@@ -2,11 +2,11 @@
 export type Precision =
   "exact_grave" | "cemetery_section" | "cemetery" | "approximate" | "unknown";
 export type Status = "draft" | "published";
-export type ProfileTier = "profile" | "cemetery_record";
+export type ProfileTier = "profile" | "cemetery_record" | "wikidata_listing";
 export type CemeteryRecordDetails = {
-  disposition: "unconfirmed"; provider: "arlington";
+  disposition: "unconfirmed"; provider: "arlington" | "wikidata";
   source_record_id: string; source_url: string; source_sha256: string;
-  retrieved_at: string; section: string; grave: string; disclaimer: string;
+  retrieved_at: string; section?: string; grave?: string; disclaimer?: string;
 };
 type Timestamps = { created_at: string; updated_at: string };
 export type PersonRow = Timestamps & {
@@ -169,6 +169,8 @@ export type CemeteryProfile = ProfileCemetery & {
   latitude: number;
   longitude: number;
   people: DiscoveryPerson[];
+  people_total?: number;
+  page?: number;
   categories: CategoryOption[];
   sources: ProfileSource[];
 };
@@ -210,6 +212,8 @@ export type Database = {
     };
     Views: { discovery_people: { Row: DiscoveryPerson; Relationships: [] } };
     Functions: {
+      map_summary: { Args: BoundsArgs & Omit<QueryOptions, "result_limit">; Returns: import("../lib/explore/map-summary").MapSummary };
+      map_people_page: { Args: BoundsArgs & Omit<QueryOptions, "result_limit"> & { after_id?: string | null }; Returns: DiscoveryPerson[] };
       nearby_people: {
         Args: {
           latitude: number;

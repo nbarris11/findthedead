@@ -7,8 +7,7 @@ import {
   CLUSTER_RADIUS,
   MAP_STYLE,
 } from "@/lib/explore/config";
-import { toFeatureCollection, isCoincident } from "@/lib/explore/geojson";
-import type { DiscoveryPerson } from "@/types/database";
+import { mapFeatures, combinedBounds, canonicalBounds, type MapPoint } from "@/lib/explore/map-summary";
 import type { Bounds } from "@/lib/validation/geo";
 
 const SOURCE_ID = "people";
@@ -18,7 +17,7 @@ const CLUSTER_COUNT_LAYER = "people-cluster-count";
 
 type PersonFeature = mapboxgl.GeoJSONFeature & {
   geometry: GeoJSON.Point;
-  properties: { id?: string; cluster_id?: number };
+  properties: MapPoint & { cluster_id?: number };
 };
 
 /** mapbox-gl's cluster methods are callback-only in its shipped types;
@@ -49,9 +48,8 @@ function getClusterLeaves(
 }
 
 export type MapCanvasProps = {
-  people: readonly DiscoveryPerson[];
-  onSelectPerson: (id: string) => void;
-  onSelectMany: (ids: string[]) => void;
+  points: readonly MapPoint[];
+  onSelectArea: (bounds: Bounds, total: number) => void;
   onBoundsChange: (bounds: Bounds) => void;
   userLocation: { latitude: number; longitude: number } | null;
   initialView: { latitude: number; longitude: number; zoom: number };
@@ -62,9 +60,8 @@ export type MapCanvasProps = {
  *  React marker per person: with hundreds of records this stays smooth on
  *  mobile where per-marker DOM nodes would not. */
 export function MapCanvas({
-  people,
-  onSelectPerson,
-  onSelectMany,
+  points,
+  onSelectArea,
   onBoundsChange,
   userLocation,
   initialView,
@@ -74,12 +71,12 @@ export function MapCanvas({
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const flownToRef = useRef<string | null>(null);
-  const callbacksRef = useRef({ onSelectPerson, onSelectMany, onBoundsChange });
+  const callbacksRef = useRef({ onSelectArea, onBoundsChange });
 
   // Runs after every render (no dependency array) purely to keep the ref
   // fresh for the map's event handlers, which close over it once on mount.
   useEffect(() => {
-    callbacksRef.current = { onSelectPerson, onSelectMany, onBoundsChange };
+    callbacksRef.current = { onSelectArea, onBoundsChange };
   });
 
   useEffect(() => {
@@ -102,12 +99,12 @@ export function MapCanvas({
       moveTimer = setTimeout(() => {
         const b = map.getBounds();
         if (!b) return;
-        callbacksRef.current.onBoundsChange({
+        callbacksRef.current.onBoundsChange(canonicalBounds({
           west: b.getWest(),
           south: b.getSouth(),
           east: b.getEast(),
           north: b.getNorth(),
-        });
+        }));
       }, 250);
     };
 
@@ -117,6 +114,7 @@ export function MapCanvas({
         data: { type: "FeatureCollection", features: [] },
         cluster: true,
         clusterMaxZoom: CLUSTER_MAX_ZOOM,
+        clusterProperties: { total_count: ["+", ["get", "count"]] },
         clusterRadius: CLUSTER_RADIUS,
       });
       map.addLayer({
@@ -128,7 +126,7 @@ export function MapCanvas({
           "circle-color": "#d8f58a",
           "circle-radius": [
             "step",
-            ["get", "point_count"],
+            ["get", "total_count"],
             18,
             10,
             24,
@@ -145,7 +143,7 @@ export function MapCanvas({
         source: SOURCE_ID,
         filter: ["has", "point_count"],
         layout: {
-          "text-field": ["get", "point_count_abbreviated"],
+          "text-field": ["number-format", ["get", "total_count"], {"max-fraction-digits": 0}],
           "text-size": 13,
           "text-font": ["DIN Pro Medium", "Arial Unicode MS Bold"],
         },
@@ -158,59 +156,43 @@ export function MapCanvas({
         filter: ["!", ["has", "point_count"]],
         paint: {
           "circle-color": "#f5f4ec",
-          "circle-radius": 7,
+          "circle-radius": ["case", [">", ["get", "count"], 1], 22, 7],
           "circle-stroke-width": 2,
           "circle-stroke-color": "#d8f58a",
         },
       });
 
+      map.addLayer({
+        id: "people-point-count", type: "symbol", source: SOURCE_ID,
+        filter: ["all", ["!", ["has", "point_count"]], [">", ["get", "count"], 1]],
+        layout: {"text-field": ["number-format", ["get", "count"], {"max-fraction-digits": 0}], "text-size": 13},
+        paint: {"text-color": "#17221b"},
+      });
+      const selectPoints = (points: MapPoint[]) => {
+        if (!points.length) return;
+        const bounds = combinedBounds(points);
+        if (bounds.east-bounds.west > 0.00001 || bounds.north-bounds.south > 0.00001) {
+          map.fitBounds([[bounds.west,bounds.south],[bounds.east,bounds.north]], {padding:70,maxZoom:Math.min(map.getZoom()+3,19)});
+        } else {
+          callbacksRef.current.onSelectArea({west:Math.max(-180,bounds.west-1e-8),east:Math.min(180,bounds.east+1e-8),south:Math.max(-90,bounds.south-1e-8),north:Math.min(90,bounds.north+1e-8)}, points.reduce((n,p)=>n+p.count,0));
+        }
+      };
       map.on("click", CLUSTER_LAYER, async (e) => {
-        const [feature] = map.queryRenderedFeatures(e.point, {
-          layers: [CLUSTER_LAYER],
-        }) as PersonFeature[];
-        const clusterId = feature?.properties?.cluster_id;
-        const source = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
-        if (clusterId === undefined || !source) return;
+        const [feature] = map.queryRenderedFeatures(e.point,{layers:[CLUSTER_LAYER]}) as PersonFeature[];
+        const clusterId=feature?.properties?.cluster_id;
+        const source=map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
+        if(clusterId===undefined || !source)return;
         try {
-          const expansionZoom = await getClusterExpansionZoom(source, clusterId);
-          if (expansionZoom > map.getZoom() + 0.15) {
-            map.easeTo({ center: feature.geometry.coordinates as [number, number], zoom: expansionZoom });
-            return;
-          }
-        } catch {
-          // Expansion zoom unavailable; fall through to the leaf list below.
-        }
-        const leaves = await getClusterLeaves(source, clusterId, 200);
-        const coords = leaves.map((leaf) => leaf.geometry.coordinates as [number, number]);
-        if (!isCoincident(coords) && coords.length > 0) {
-          map.easeTo({ center: coords[0], zoom: Math.min(map.getZoom() + 2, 16) });
-          return;
-        }
-        callbacksRef.current.onSelectMany(
-          leaves.map((leaf) => leaf.properties?.id).filter((id): id is string => Boolean(id)),
-        );
+          const zoom=await getClusterExpansionZoom(source,clusterId);
+          if(zoom>map.getZoom()+0.15){map.easeTo({center:feature.geometry.coordinates as [number,number],zoom});return;}
+          // Leaves are bounded aggregate cells, not a truncated list of people.
+          selectPoints((await getClusterLeaves(source,clusterId,2048)).map(f=>f.properties));
+        } catch { /* A source update invalidated this cluster; the next click uses current data. */ }
       });
       map.on("click", UNCLUSTERED_LAYER, (e) => {
-        // Records with identical (cemetery-precision) coordinates render as
-        // one visual dot even past clusterMaxZoom, where Mapbox stops
-        // clustering. A tight box query catches every feature under that
-        // one dot instead of the single arbitrary one a point query or
-        // e.features would return, so nobody visually "under" a pin is
-        // silently dropped.
-        const box: [mapboxgl.PointLike, mapboxgl.PointLike] = [
-          [e.point.x - 4, e.point.y - 4],
-          [e.point.x + 4, e.point.y + 4],
-        ];
-        const ids = Array.from(
-          new Set(
-            map
-              .queryRenderedFeatures(box, { layers: [UNCLUSTERED_LAYER] })
-              .map((feature) => feature.properties?.id as string | undefined)
-              .filter((id): id is string => Boolean(id)),
-          ),
-        );
-        if (ids.length > 1) callbacksRef.current.onSelectMany(ids);
-        else if (ids.length === 1) callbacksRef.current.onSelectPerson(ids[0]);
+        const features=map.queryRenderedFeatures(e.point,{layers:[UNCLUSTERED_LAYER]}) as PersonFeature[];
+        const unique=[...new Map(features.map(f=>[f.id,f.properties])).values()];
+        selectPoints(unique);
       });
       for (const layer of [CLUSTER_LAYER, UNCLUSTERED_LAYER]) {
         map.on("mouseenter", layer, () => (map.getCanvas().style.cursor = "pointer"));
@@ -244,11 +226,11 @@ export function MapCanvas({
     if (!map) return;
     const apply = () => {
       const source = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
-      source?.setData(toFeatureCollection(people));
+      source?.setData(mapFeatures(points));
     };
     if (map.isStyleLoaded()) apply();
     else map.once("load", apply);
-  }, [people]);
+  }, [points]);
 
   useEffect(() => {
     const map = mapRef.current;
