@@ -1,6 +1,6 @@
 # Find The Dead — research and publishing handoff
 
-Updated September 9, 2026 (local); live release verified September 10, 00:36 UTC.
+Updated September 9, 2026 (local); national release verified September 10, 01:12 UTC.
 Read this and `docs/BULK-RESEARCH.md` before continuing. Inspect current progress
 and processes before starting collectors. Preserve the user-owned, untracked
 `SESSION-SUMMARY.md`; never overwrite or commit it. Keep credentials out of docs.
@@ -10,9 +10,9 @@ and processes before starting collectors. Preserve the user-owned, untracked
 - Live: https://findthedead.netlify.app
 - Repository: https://github.com/nbarris11/findthedead, branch `main`.
 - Supabase: `ttssyodmfybcadqahfeg`.
-- **1,084 public people: 145 existing profiles + 939 cemetery records.**
-- **69 cemeteries, 38 images.** No images or role tags added by directory release.
-- Code commit `c2681f0` pushed; record-aware frontend verified live before release.
+- **81,622 public people: 145 profiles + 939 official cemetery records + 80,538 Wikidata listings.**
+- **13,196 cemeteries, 38 images.** No images or role tags added by directory releases.
+- Production frontend: `412e660`; optional count shortcut `021d9b6` awaits Netlify credits.
 - Migration `20260910000749_cemetery_record_batches.sql` applied and recorded.
 - All 939 passed public database checks: identity, fields, citations, cemetery
   mapping, discovery visibility, empty categories/photos and unconfirmed remains.
@@ -164,9 +164,8 @@ Top 100 structurally eligible burial places cover 33,017 national candidates;
 coverage is not verification. Prioritize operators by usable yield. The current
 sources do not cover all 97,165 candidates. The remaining long tail needs more
 public operator/archival sources. Enrichment stays secondary to usable directory
-coverage. Cemetery page reads currently have a1,000-row default limit; current
-Arlington page fits and was checked. Add pagination before any cemetery exceeds
-1,000 public entries; sitemap reads already paginate.
+coverage. Cemetery pages now paginate 100 names; the map has complete aggregated counts
+and cursor pages of 50 names. The sitemap is split into 10,000-row shards.
 
 ## Commands
 
@@ -212,4 +211,72 @@ Both migrations (`20260910004144_map_aggregate_counts.sql` and
 `20260910004653_wikidata_listing_batches.sql`) are applied remotely. Database map
 count verified at 1,084 before national release; security advisors found no issues.
 Tests passed at 115, TypeScript/lint passed, webpack production build passed.
-Frontend deployment and national publication are in progress at this checkpoint.
+Frontend commit `412e660` is deployed. All 80,538 listings are published; see
+final verification below. Commit `021d9b6` adds an accessible count-to-name-list
+button; that follow-up deployment was blocked by exhausted Netlify account credits.
+Core map aggregation, listing labels, cemetery pagination and sitemap shards are
+already live on commit `412e660`. Do not conflate the optional shortcut with the
+map fix. Failed follow-up deploy: `6aa2048ff0efb9a9f3bd0578`; Netlify reports
+"Skipped due to account credit usage exceeded". No plan purchase or billing
+change was attempted. Supabase access and the data release are unaffected.
+
+
+## National release complete — final verification
+
+- All 42 immutable batches in `wikidata-listings-20260910005441` released.
+  First batch 20, next 40 batches 2,000 each, last batch 518. Exact replay passed.
+- Sum of release process times: **236.796 seconds (3m57s)** including replay of
+  the canary. Preparation, development and tests are separate from this number.
+- Full database reconciliation: **80,538 expected/present, zero mismatches** across
+  names, identity, lifespan precision, tiers, hashes, citations, cemetery relations
+  and absence of invented editorial fields/categories/images.
+- Public map: **81,622 total, sum of all cells 81,622**, 50 cells for world bounds.
+  One uncached public map request measured 3,439ms during verification.
+- Sitemap: **81,622 person URLs**, 13,196 cemetery URLs and the home page;
+  94,819 unique URLs total. Every new listing's URL checked.
+- Live first record from every batch passed HTTP, source and unconfirmed-status
+  wording checks (42 pages), plus all 20 canary pages before the full release.
+- Public name cursor pagination traversed **4,029 names** at one dense location,
+  without duplicates or dropped records. Search returned the new canary record.
+- Reports: `release/final-public-check.json`, `release/db-reconciliation.json`,
+  `release/check-ledger.sql`, `release/verify-public.mjs`, and `release-results.json`
+  beneath the prepared directory. No publisher remains running after completion.
+- The original national queue was fully assessed: 80,538 newly published,
+  1,062 already public, 15,565 held. The other 22 public people are outside that
+  queue. Hold reasons overlap: 8,415 unresolved cemetery types/coordinates,
+  7,481 unusable person labels, 2,963 cemetery-identity conflicts, 2,021 cached
+  identity conflicts, 362 cached burial qualifiers/conflicts, 262 multiple sites,
+  14 source/death assertion problems and 2 duplicate name/lifespan cases.
+- Next work is targeted exceptions: missing English labels and cemetery types
+  (churches/tombs/places missing country or classification need explicit handling),
+  followed by substantive claim conflicts. Do not recollect the 80,538 published
+  people or restart optional biography/image research as the primary pipeline.
+- Preserve original queue hashes used by government caches. Refresh the separate
+  `public-identities.json` before another preparation run; inspect its timestamp
+  and count (a post-release refresh was attempted in this turn). All prior
+  collector-completion states remain valid.
+- Local TypeScript briefly found duplicate generated `.next/types/* 2.ts` files.
+  Only those duplicate generated files were removed; TypeScript passed afterward.
+
+
+Deployment verification must use Netlify's actual deployed ID/source, not assume
+that a Git push is live. Netlify MCP project/deploy readers are available. For a
+source upload, archive only committed files into a temporary directory before
+using its scoped deployment command: never upload `.env.local`, raw research
+caches or the user-owned SESSION-SUMMARY.md. The optional count shortcut is in
+commit `021d9b6`; deploy it only after the account credit issue is resolved.
+
+
+### Full-world map performance follow-up
+
+Live full-world requests occasionally exceeded the public database time limit
+at 81,622 rows. A rolled-back live benchmark measured 5,911ms with the original
+correlated burial RLS checks and 1,365ms with equivalent membership checks.
+Migration `20260910012134_map_rls_membership.sql` is applied: public people and
+cemetery visibility remain enforced by their own RLS, including draft cemeteries.
+Nine focused PostgreSQL/PostGIS tests passed, including full pagination and hiding
+a cemetery; security advisors found no issues. Planner statistics were refreshed
+with ANALYZE on people, burials, cemeteries, sources and person_categories.
+Post-fix HTTP timings are in `release/map-performance-check.json` beneath the
+national release directory. After large future imports, refresh planner statistics.
+This database fix is live and does not require Netlify deployment credits.

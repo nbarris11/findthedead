@@ -22,6 +22,9 @@ test('map summary counts beyond 200/1000, paginates every name and respects RLS/
   const seen=new Set<string>();let after:string|null=null;
   for(;;){const rows: {id:string}[]=(await db.query<{id:string}>('select * from map_people_page(-77.001,38.999,-76.999,39.001,0,null,$1)',[after])).rows;for(const p of rows.slice(0,50)){assert.ok(!seen.has(p.id));seen.add(p.id);}if(rows.length<51)break;after=rows[49].id;}
   assert.equal(seen.size,1200);
+  await db.exec("reset role; update cemeteries set status='draft'; set role anon;");
+  assert.equal((await db.query<{v:{total:number}}>('select map_summary(-180,-90,180,90) v')).rows[0].v.total,0);
+  await db.exec("reset role; update cemeteries set status='published'; set role anon;");
   await assert.rejects(db.query('select map_summary(-181,0,180,10)'));
   assert.equal((await db.query<{v:{total:number}}>('select map_summary(170,-10,-170,10) v')).rows[0].v.total,0);
  } finally {await db.close();}

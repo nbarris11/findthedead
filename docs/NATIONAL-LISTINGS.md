@@ -19,7 +19,11 @@ No biography, photo, role category or editorial score is generated.
 
 The first prepared result is 80,538 listings across 13,167 cemetery identities;
 15,565 candidates are held and 1,062 national candidates were already public.
-Read RESEARCH-HANDOFF.md for the actual publication state, not this preparation count.
+All 80,538 are now published and reconciled with zero mismatches. Public total:
+81,622 people across 13,196 cemeteries. The 42 release processes totaled 236.796
+seconds; preparation and tests are separate. All sitemap URLs, map counts,
+42 representative live pages and a 4,029-name cursor traversal passed.
+Read RESEARCH-HANDOFF.md for the exact evidence paths.
 
 ## Repeatable commands
 
@@ -58,3 +62,8 @@ files contain up to 10,000 data URLs. These changes support the national data si
 Verify actual public totals, all batch identities/sources, map sum, pagination,
 source wording and sitemap shards after release. Record throughput separately
 for preparation and publication; no claimed future collection rate is guaranteed.
+
+After a large release, refresh PostgreSQL planner statistics with ANALYZE on the
+people, burials, cemeteries, sources and person_categories tables. The map's burial
+RLS policy now uses equivalent public-ID membership checks to keep world counts
+within the public request deadline. See the handoff for measured timings.

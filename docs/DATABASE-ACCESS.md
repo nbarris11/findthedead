@@ -57,3 +57,11 @@ Deploy the record-aware frontend before releasing directory records. Check the
 public API, profile wording, source disclaimer, source retrieval date, search,
 map results and sitemap after each release. Never describe a directory record
 as a confirmed physical interment.
+
+
+## National listing publisher
+
+The same direct CLI access released 80,538 national listings in 42 set-based
+transactions. Use `npm run publish:national -- prepared-directory --confirm`;
+read `NATIONAL-LISTINGS.md` for source policies, canary and replay behavior.
+The complete-count map and national listing migrations are recorded remotely.
